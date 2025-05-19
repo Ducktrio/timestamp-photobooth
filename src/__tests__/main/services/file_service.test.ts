@@ -1,20 +1,17 @@
-import { File } from '../../../main/services/file_service';
+// No need for mocks because filepath are ensured to be mockked from file service
 import { deleteFolder, folderExists } from '../../../main/utilities/filesystem';
 
 jest.mock('electron');
+import path from 'path';
 
-describe('FileService', () => {
-  it('ensure folder exists', async () => {
-    await File.scanFolders();
+describe('File service', () => {
+  const testDir = path.join(process.cwd(), 'tests');
 
-    const doesExists = await Promise.all(
-      Object.values(File.FOLDERPATH).map((value) => {
-        return folderExists(value);
-      })
-    );
+  beforeAll(async () => {
+    if (await folderExists(testDir)) await deleteFolder(testDir);
+  });
 
-    expect(doesExists).toEqual([true, true, true, true]);
-
-    await deleteFolder(process.cwd() + '/tests/');
+  it('should be empty', async () => {
+    expect(await folderExists(testDir)).toBeFalsy();
   });
 });

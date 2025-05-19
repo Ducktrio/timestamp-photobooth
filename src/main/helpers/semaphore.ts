@@ -15,7 +15,7 @@ type WaitingPromise = {
 export class Semaphore {
   private running = 0;
   private waiting: WaitingPromise[] = [];
-  private debugLogging = true;
+  private debugLogging = false;
 
   constructor(private label: string, public max: number = cpus().length) {
     if (max < 1) {

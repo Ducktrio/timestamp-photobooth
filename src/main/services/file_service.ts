@@ -1,5 +1,9 @@
 import { app } from 'electron';
-import { ensureFolderExists } from '../utilities/filesystem';
+import path from 'path';
+import {
+  ensureFolderExists,
+  listFolderContents,
+} from '../utilities/filesystem';
 
 export class FileService {
   private userDataPath = app.getPath('userData');
@@ -23,7 +27,34 @@ export class FileService {
     ]);
   }
 
-  public async getExports() {}
+  /**
+   * Get list of exports files
+   *
+   * Video, rendered frame, print file included.
+   * @return Promise<string[]>
+   */
+  public async getExports() {
+    try {
+      let files: string[] = [];
+      listFolderContents(path.resolve(this.FOLDERPATH.exports)).then(
+        (value) => {
+          value.forEach((file) => {
+            files.push(path.join(path.resolve(this.FOLDERPATH.exports), file));
+          });
+        }
+      );
+      return files;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getCaptures() {
+    try {
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export const File = new FileService();

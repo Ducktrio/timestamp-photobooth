@@ -6,9 +6,9 @@ on:
     branches:
       - dev
 
-permission:
-pull-requests: write
-contents: write
+permissions:
+  pull-requests: write
+  contents: write
 jobs:
   test:
     runs-on: ubuntu-latest

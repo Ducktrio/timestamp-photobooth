@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Testing in NodeJS ${{ matrix.node-version }} ${{secret.message}}
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'

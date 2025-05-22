@@ -1,0 +1,40 @@
+name: Dev Run Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - dev
+
+permissions:
+  pull-requests: write
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Testing in NodeJS ${{ matrix.node-version }} ${{secrets.message}}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+  merge:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: merge PR
+        run: gh pr merge "$PR_URL" --merge --admin
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_URL: ${{github.event.pull_request.html_url}}

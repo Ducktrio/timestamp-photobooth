@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Testing in NodeJS ${{ matrix.node-version }} ${{secret.message}}
+      - name: Testing in NodeJS ${{ matrix.node-version }} ${{secrets.message}}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}

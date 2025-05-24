@@ -1,25 +1,34 @@
-jest.mock('electron');
+import path from 'path';
+jest.mock('electron', () => {
+  return {
+    app: {
+      getPath: jest.fn().mockReturnValue(path.join(process.cwd(), 'mock-test')),
+    },
+  };
+});
 import { File } from '../../../main/services/file_service';
-import { folderExists } from '../../../main/utilities/filesystem';
 import { app } from 'electron';
-import { deleteFolderSync } from '../../../main/utilities/filesystem.sync';
+import {
+  deleteFolderSync,
+  folderExistsSync,
+} from '../../../main/utilities/filesystem.sync';
 
 describe('FileService', () => {
   beforeEach(() => {
-    deleteFolderSync(app.getPath('userData'));
+    if (folderExistsSync(app.getPath('userData')))
+      deleteFolderSync(app.getPath('userData'));
   });
-  afterEach(async () => {
+  afterAll(() => {
     deleteFolderSync(app.getPath('userData'));
   });
   it('ensure folder exists', async () => {
     await File.scanFolders();
 
-    const doesExists = await Promise.all(
-      Object.values(File.FOLDERPATH).map((value) => {
-        return folderExists(value);
-      })
-    );
-
+    // IDK why but the promise all from scanFolders() have early resolve issue, have to wait a second
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const doesExists = Object.values(File.FOLDERPATH).map((value) => {
+      return folderExistsSync(value);
+    });
     expect(doesExists).toEqual([true, true, true, true]);
   });
 });

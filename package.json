@@ -93,7 +93,8 @@
       "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     },
     "setupFiles": [
-      "./.erb/scripts/check-build-exists.ts"
+      "./.erb/scripts/check-build-exists.ts",
+      "./src/setupTest.ts"
     ],
     "testEnvironment": "jsdom",
     "testEnvironmentOptions": {
@@ -112,7 +113,9 @@
     "electron-updater": "^5.0.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "timers-browserify": "^2.0.12",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.6",

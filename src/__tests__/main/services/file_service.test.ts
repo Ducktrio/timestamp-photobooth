@@ -1,9 +1,16 @@
-import { File } from '../../../main/services/file_service';
-import { deleteFolder, folderExists } from '../../../main/utilities/filesystem';
-
 jest.mock('electron');
+import { File } from '../../../main/services/file_service';
+import { folderExists } from '../../../main/utilities/filesystem';
+import { app } from 'electron';
+import { deleteFolderSync } from '../../../main/utilities/filesystem.sync';
 
 describe('FileService', () => {
+  beforeEach(() => {
+    deleteFolderSync(app.getPath('userData'));
+  });
+  afterEach(async () => {
+    deleteFolderSync(app.getPath('userData'));
+  });
   it('ensure folder exists', async () => {
     await File.scanFolders();
 
@@ -14,7 +21,5 @@ describe('FileService', () => {
     );
 
     expect(doesExists).toEqual([true, true, true, true]);
-
-    await deleteFolder(process.cwd() + '/tests/');
   });
 });

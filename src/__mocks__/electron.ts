@@ -1,3 +1,3 @@
 export const app = {
-  getPath: jest.fn().mockReturnValueOnce(process.cwd() + '/tests'),
+  getPath: jest.fn().mockReturnValueOnce(process.cwd() + '/mock-test'),
 };

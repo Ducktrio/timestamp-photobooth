@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import path from 'path';
 import {
+  deleteFile,
   ensureFolderExists,
   listFolderContents,
 } from '../utilities/filesystem';
@@ -36,21 +37,63 @@ export class FileService {
   public async getExports() {
     try {
       let files: string[] = [];
-      listFolderContents(path.resolve(this.FOLDERPATH.exports)).then(
-        (value) => {
-          value.forEach((file) => {
-            files.push(path.join(path.resolve(this.FOLDERPATH.exports), file));
-          });
-        }
-      );
+      const dir = path.resolve(this.FOLDERPATH.exports);
+      await listFolderContents(dir).then((value) => {
+        value.forEach((file) => {
+          files.push(path.join(dir, file));
+        });
+      });
       return files;
     } catch (error) {
       throw error;
     }
   }
 
+  /**
+   * Get filepaths of captured photo as array of string
+   */
   public async getCaptures() {
     try {
+      let files: string[] = [];
+      const dir = path.resolve(this.FOLDERPATH.captures);
+      await listFolderContents(dir).then((value) => {
+        value.forEach((file) => {
+          files.push(path.join(dir, file));
+        });
+      });
+      return files;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Unlinks every content inside folder path of user data.
+   *
+   * Use this for cleaning workspace folder from earlier use of session
+   */
+  public async cleanWorkspace() {
+    try {
+      const captures = await listFolderContents(this.FOLDERPATH.captures);
+      const motions = await listFolderContents(this.FOLDERPATH.motions);
+      const exports = await listFolderContents(this.FOLDERPATH.exports);
+
+      if (!captures.length && !motions.length && !exports.length) {
+        console.warn('workspace folder already empty when attempting to clean');
+        return;
+      }
+
+      await Promise.all([
+        captures.map((value) => {
+          return deleteFile(path.join(this.FOLDERPATH.captures, value));
+        }),
+        motions.map((value) => {
+          return deleteFile(path.join(this.FOLDERPATH.motions, value));
+        }),
+        exports.map((value) => {
+          return deleteFile(path.join(this.FOLDERPATH.exports, value));
+        }),
+      ]);
     } catch (error) {
       throw error;
     }

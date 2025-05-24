@@ -30,5 +30,6 @@ describe('FileService', () => {
       return folderExistsSync(value);
     });
     expect(doesExists).toEqual([true, true, true, true]);
+
   });
 });

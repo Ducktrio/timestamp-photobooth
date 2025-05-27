@@ -5,7 +5,8 @@ import NextButton from 'renderer/components/NextButton';
 import Page from 'renderer/components/Page';
 import Selector from 'renderer/components/Selector';
 import { sessionData } from 'renderer/contexts/DataContext';
-import { useFetchFrames } from 'renderer/hooks/useFetchFrames';
+import { usePhase } from 'renderer/contexts/PhaseContext';
+import { useFramePreview } from 'renderer/hooks/useFramePreview';
 import Frame from 'renderer/interfaces/Frame';
 
 interface Options {
@@ -15,6 +16,7 @@ interface Options {
 
 export default function PhaseOnePage() {
   const [selected, setSelected] = useState<number>(-1);
+  const phase = usePhase();
   const data = sessionData();
   const [options] = useState<Options[]>([
     {
@@ -26,12 +28,14 @@ export default function PhaseOnePage() {
       split: true,
     },
   ]);
-  const [category, setCategory] = useState<Options | null>(options[0]);
+  const [category, setCategory] = useState<Options>(options[0]);
 
-  const rawFrames = useFetchFrames();
+  const rawFrames = useFramePreview(category.split);
   const [frames, setFrames] = useState<Frame[]>([]);
 
   useEffect(() => {
+    data.setSplit(frames[selected]?.split);
+    data.setCount(frames[selected]?.count);
     data.setFrame(frames[selected]);
   }, [selected]);
 
@@ -39,13 +43,18 @@ export default function PhaseOnePage() {
     setFrames(rawFrames.filter((x) => x.split === category?.split));
   }, [category, rawFrames]);
 
+  const handleNext = () => {
+    phase.next();
+  };
+
   return (
     <Page className="flex flex-col justify-between items-center">
       <ExitButton />
       {selected != -1 && (
         <NextButton
-          className="absolute top-0 right-0 m-8 rounded-full p-4 gap-2 flex flex-row items-center justify-center text-on-surface"
-          onClick={() => {}}
+          onClick={() => {
+            handleNext();
+          }}
         />
       )}
 

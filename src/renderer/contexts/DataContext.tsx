@@ -9,14 +9,24 @@ import Frame from 'renderer/interfaces/Frame';
 import PaymentCallback from 'renderer/interfaces/PaymentCallback';
 
 interface DataContextValue {
+  // Frame selection
   frame: Frame | null;
   setFrame: (frame: Frame) => void;
 
   payment: PaymentCallback | null;
   setPayment: (payment: PaymentCallback) => void;
 
+  // Number of prints
   quantity: number;
   setQuantity: (qty: number) => void;
+
+  // Define the frame selection number of pictures as layout config
+  count: number;
+  setCount: (count: number) => void;
+
+  // Type of frame layout, split for strip frames
+  split: boolean;
+  setSplit: (split: boolean) => void;
 
   canvas: string | null;
   saveCanvas: (canvasState: string) => void;
@@ -46,6 +56,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   const [canvas, saveCanvas] = useState<string | null>(null);
   const [scaleFactor, setScaleFactor] = useState<number>(0);
   const [pictures, setPictures] = useState<string[]>([]);
+  const [count, setCount] = useState<number>(-1);
+  const [split, setSplit] = useState<boolean>(false);
 
   const originalWidth = useRef<number>(1000);
   const originalHeight = useRef<number>(1000);
@@ -58,6 +70,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
     setScaleFactor(1);
     saveCanvas(null);
     setPictures([]);
+    setCount(-1);
+    setSplit(false);
     originalHeight.current = 1000;
     originalWidth.current = 1000;
     aspectRatio.current = 1;
@@ -78,6 +92,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
         setScaleFactor,
         pictures,
         setPictures,
+        count,
+        setCount,
+        split,
+        setSplit,
         originalHeight,
         originalWidth,
         aspectRatio,

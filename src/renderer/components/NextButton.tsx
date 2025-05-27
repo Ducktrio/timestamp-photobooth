@@ -13,7 +13,7 @@ export default function NextButton({
   style,
   className,
 }: NextButtonProps) {
-  const classes = `${className}`;
+  const classes = `absolute top-0 right-0 m-8 rounded-full p-4 gap-2 flex flex-row items-center justify-center text-on-surface${className}`;
 
   return (
     <>

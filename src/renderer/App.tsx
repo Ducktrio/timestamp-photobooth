@@ -9,6 +9,7 @@ import PhaseOnePage from './pages/PhaseOnePage';
 import { Popup } from './components/Popup';
 import * as AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
+import PhaseTwoPage from './pages/PhaseTwoPage';
 AOS.init({
   duration: 1500,
   mirror: true,
@@ -26,6 +27,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<WelcomePage />}></Route>
                 <Route path="/phase1" element={<PhaseOnePage />}></Route>
+                <Route path="/phase2" element={<PhaseTwoPage />}></Route>
               </Routes>
             </AppInitiators>
           </PhaseProvider>

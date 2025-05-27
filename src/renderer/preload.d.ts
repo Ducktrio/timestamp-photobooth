@@ -13,6 +13,8 @@ declare global {
       };
       config: {
         BOOTH_TOKEN: string;
+        SNAP_SCRIPT: string;
+        ENV: string;
       };
     };
   }

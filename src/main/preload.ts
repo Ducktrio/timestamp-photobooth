@@ -20,5 +20,10 @@ contextBridge.exposeInMainWorld('electron', {
   },
   config: {
     BOOTH_TOKEN: '67b7827f8509098ee9618cb4',
+    SNAP_SCRIPT:
+      process.env.NODE_ENV === 'dev'
+        ? 'https://app.sandbox.midtrans.com/snap/snap.js'
+        : null,
+    ENV: process.env.NODE_ENV,
   },
 });

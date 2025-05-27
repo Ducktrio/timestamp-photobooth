@@ -24,7 +24,18 @@ class FrameService {
 
     return await this.API.get<Frame[]>(url)
       .then((data) => {
-        console.log(data);
+        return data;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public static async getPreview(split: boolean): Promise<Frame[]> {
+    let url: string = `frames/preview?split=${split}`;
+
+    return await this.API.get<Frame[]>(url)
+      .then((data) => {
         return data;
       })
       .catch((error) => {

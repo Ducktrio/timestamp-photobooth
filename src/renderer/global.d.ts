@@ -1,6 +1,9 @@
 declare global {
   interface Window {
-    snap: any; // Midtrans API
+    snap: {
+      pay: any;
+      embed: any;
+    }; // Midtrans API
     config: {
       BOOTH_TOKEN: string;
     };

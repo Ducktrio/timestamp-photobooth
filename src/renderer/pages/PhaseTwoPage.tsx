@@ -39,7 +39,7 @@ export default function PhaseTwoPage() {
       {selected >= 0 && (
         <NextButton
           onClick={() => {
-            () => handleNext();
+            handleNext();
           }}
         />
       )}

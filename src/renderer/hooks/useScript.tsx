@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 /**
  * Custom hook to create script tag and append to HTML upon rendering
@@ -10,10 +10,13 @@ const useScript = (src: string, attributes?: Record<string, string>) => {
     if (document.querySelector(`script[src="${src}"]`)) {
       return;
     }
-    const script = document.createElement("script");
+    let script = document.createElement('script');
 
     script.src = src;
     script.async = true;
+    script.onload = () => {
+      console.log('SNAP JS script loaded');
+    };
 
     if (attributes)
       Object.entries(attributes).forEach(([key, value]) => {

@@ -18,4 +18,7 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  config: {
+    BOOTH_TOKEN: '67b7827f8509098ee9618cb4',
+  },
 });

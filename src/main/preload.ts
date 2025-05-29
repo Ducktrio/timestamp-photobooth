@@ -18,4 +18,15 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  config: {
+    BOOTH_TOKEN: '67b7827f8509098ee9618cb4',
+    SNAP_SCRIPT:
+      process.env.NODE_ENV === 'development'
+        ? 'https://app.sandbox.midtrans.com/snap/snap.js'
+        : null,
+    ENV: process.env.NODE_ENV,
+  },
+  onStream: (chunk: Uint8Array) => {
+    return null;
+  },
 });

@@ -1,50 +1,46 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
+import { Routes, HashRouter, Route } from 'react-router-dom';
 import './App.css';
-
-const Hello = () => {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
-};
+import { DataProvider } from './contexts/DataContext';
+import { PopupProvider } from './contexts/PopupContext';
+import { PhaseProvider } from './contexts/PhaseContext';
+import { AppInitiators } from './helpers/AppInitiators';
+import WelcomePage from './pages/WelcomePage';
+import PhaseOnePage from './pages/PhaseOnePage';
+import { Popup } from './components/Popup';
+import * as AOS from 'aos';
+import 'aos/dist/aos.css'; // You can also use <link> for styles
+import PhaseTwoPage from './pages/PhaseTwoPage';
+import PhaseThreePage from './pages/PhaseThreePage';
+import PhaseFourPage from './pages/PhaseFourPage';
+import BoothManager from './services/BoothManager';
+import useScript from './hooks/useScript';
+import PhaseFivePage from './pages/PhaseFivePage';
+AOS.init({
+  duration: 1500,
+  mirror: true,
+  anchorPlacement: 'top',
+});
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <DataProvider>
+      <PopupProvider>
+        <Popup />
+        <HashRouter>
+          <PhaseProvider>
+            <AppInitiators>
+              <Routes>
+                <Route path="/" element={<WelcomePage />}></Route>
+                <Route path="/phase1" element={<PhaseOnePage />}></Route>
+                <Route path="/phase2" element={<PhaseTwoPage />}></Route>
+                <Route path="/phase3" element={<PhaseThreePage />}></Route>
+                <Route path="/phase4" element={<PhaseFourPage />}></Route>
+                <Route path="/phase5" element={<PhaseFivePage />}></Route>
+              </Routes>
+            </AppInitiators>
+          </PhaseProvider>
+        </HashRouter>
+      </PopupProvider>
+    </DataProvider>
   );
 }

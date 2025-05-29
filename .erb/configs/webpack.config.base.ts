@@ -24,6 +24,14 @@ const configuration: webpack.Configuration = {
           },
         },
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
 

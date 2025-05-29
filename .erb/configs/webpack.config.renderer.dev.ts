@@ -81,7 +81,20 @@ const configuration: webpack.Configuration = {
       },
       {
         test: /\.s?css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [require('tailwindcss'), require('autoprefixer')],
+              },
+            },
+          },
+
+          'sass-loader',
+        ],
         exclude: /\.module\.s?(c|a)ss$/,
       },
       // Fonts
@@ -155,9 +168,8 @@ const configuration: webpack.Configuration = {
     port,
     compress: true,
     hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    static: {
-      publicPath: '/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
     },
     historyApiFallback: {
       verbose: true,

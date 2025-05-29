@@ -16,6 +16,7 @@ declare global {
         SNAP_SCRIPT: string;
         ENV: string;
       };
+      onStream: (callback: (chunk: Uint8Array) => void) => void;
     };
   }
 }

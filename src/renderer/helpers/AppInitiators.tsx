@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
+import { usePhase } from 'renderer/contexts/PhaseContext';
 import BoothManager from 'renderer/services/BoothManager';
 import { ErrorHandler } from './ErrorHandler';
 
@@ -14,6 +15,8 @@ export function AppInitiators({ children }: AppInitiatorProps) {
 
   const [state, setState] = useState<State>(State.LOADING);
   const [error, setError] = useState<Error | null>(null);
+  const phase = usePhase();
+
   useEffect(() => {
     if (state === State.LOADING) {
       (async () => {
@@ -21,6 +24,7 @@ export function AppInitiators({ children }: AppInitiatorProps) {
       })()
         .then(() => {
           setState(State.RUNNING);
+          phase.jumpTo(4);
         })
         .catch((error) => {
           setState(State.ERROR);

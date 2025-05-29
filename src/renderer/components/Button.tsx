@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 interface ButtonProps {
   className?: string;
   type?: ButtonType;
@@ -8,36 +8,36 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-type ButtonType = "primary" | "secondary" | "tertiary" | "danger";
-type ButtonVariant = "fill" | "outline";
+type ButtonType = 'primary' | 'secondary' | 'tertiary' | 'danger';
+type ButtonVariant = 'fill' | 'outline';
 
 const styles: Record<ButtonType, Record<ButtonVariant, string>> = {
   primary: {
     outline:
-      "text-primary border-2 border-primary active:bg-primary active:text-on-primary active:shadow-none",
-    fill: "bg-primary text-on-primary active:bg-primary-container active:text-on-primary-container",
+      'text-primary border-2 border-primary active:bg-primary active:text-on-primary active:shadow-none',
+    fill: 'bg-primary text-on-primary active:bg-primary-container active:text-on-primary-container',
   },
   secondary: {
-    outline: "",
-    fill: "",
+    outline: '',
+    fill: '',
   },
 
   tertiary: {
-    outline: "",
-    fill: "",
+    outline: '',
+    fill: '',
   },
 
   danger: {
     outline:
-      "text-error border-2 border-error active:bg-error-container active:text-on-error-container",
-    fill: "bg-error text-on-error border border-error",
+      'text-error border-2 border-error active:bg-error-container active:text-on-error-container',
+    fill: 'bg-error text-on-error border border-error',
   },
 };
 
 export default function Button({
   className,
-  type = "primary",
-  variant = "outline",
+  type = 'primary',
+  variant = 'outline',
   children,
   disabled = false,
   onClick,
@@ -45,7 +45,13 @@ export default function Button({
   return (
     <>
       <button
-        className={`p-8 text-4xl rounded-full transition-all ${styles[type][variant]} ${className} ${disabled ? "border-1 border-surface bg-surface-container-low shadow-inset" : ""}`}
+        className={`py-8 px-12 text-4xl rounded-full transition-all ${
+          styles[type][variant]
+        } ${className} ${
+          disabled
+            ? 'border-1 border-surface bg-surface-container-low shadow-inset active:bg-surface'
+            : ''
+        }`}
         onClick={onClick}
         disabled={disabled}
       >

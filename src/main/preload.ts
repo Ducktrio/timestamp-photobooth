@@ -26,4 +26,7 @@ contextBridge.exposeInMainWorld('electron', {
         : null,
     ENV: process.env.NODE_ENV,
   },
+  onStream: (chunk: Uint8Array) => {
+    return null;
+  },
 });

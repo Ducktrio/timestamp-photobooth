@@ -14,6 +14,7 @@ import PhaseThreePage from './pages/PhaseThreePage';
 import PhaseFourPage from './pages/PhaseFourPage';
 import BoothManager from './services/BoothManager';
 import useScript from './hooks/useScript';
+import PhaseFivePage from './pages/PhaseFivePage';
 AOS.init({
   duration: 1500,
   mirror: true,
@@ -34,6 +35,7 @@ export default function App() {
                 <Route path="/phase2" element={<PhaseTwoPage />}></Route>
                 <Route path="/phase3" element={<PhaseThreePage />}></Route>
                 <Route path="/phase4" element={<PhaseFourPage />}></Route>
+                <Route path="/phase5" element={<PhaseFivePage />}></Route>
               </Routes>
             </AppInitiators>
           </PhaseProvider>

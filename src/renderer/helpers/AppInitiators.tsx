@@ -24,7 +24,6 @@ export function AppInitiators({ children }: AppInitiatorProps) {
       })()
         .then(() => {
           setState(State.RUNNING);
-          phase.jumpTo(4);
         })
         .catch((error) => {
           setState(State.ERROR);

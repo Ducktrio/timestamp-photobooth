@@ -94,6 +94,14 @@ const createWindow = async () => {
     mainWindow.maximize();
   });
 
+  mainWindow.webContents.addListener('will-redirect', (ev) => {
+    ev.preventDefault();
+  });
+
+  mainWindow.webContents.addListener('will-navigate', (ev) => {
+    ev.preventDefault();
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });

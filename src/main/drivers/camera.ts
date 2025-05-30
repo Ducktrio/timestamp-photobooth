@@ -1,12 +1,11 @@
 import { ChildProcess, spawn } from 'child_process';
-import { Locking, Semaphore } from 'main/helpers/semaphore';
+import { Locking, Semaphore } from '../helpers/semaphore';
 import { once } from 'events';
-import { folderExists } from 'main/utilities/filesystem';
 import {
   deleteFileSync,
   fileExistsSync,
   folderExistsSync,
-} from 'main/utilities/filesystem.sync';
+} from '../utilities/filesystem.sync';
 
 enum DeviceStatus {
   INACTIVE = 'inactive',
@@ -112,6 +111,10 @@ export class CameraDriver {
    * @returns {Promise<string>} path of the capture file
    */
   static async capture() {
+    if (!this.STATUS)
+      return new Error(
+        'Device status on driver is still undetermined, please call status() to ensure device availability'
+      );
     // checks if there is any residue (captures from previous session) exists
     try {
       const checkPath = `${this.FOLDER_PATH}capture-${CameraDriver.FILE_INDEX}.jpg`;
@@ -146,7 +149,11 @@ export class CameraDriver {
   /**
    * Starts video stream and return callback with stream of blob chunks
    */
-  static async start_stream(sendFrame: () => void) {
+  static async start_stream(sendFrame: (chunk: Buffer) => void) {
+    if (!this.STATUS)
+      return new Error(
+        'Device status on driver is still undetermined, please call status() to ensure device availability'
+      );
     this.STREAM_LOCK = await this.RESOURCE.acquire();
 
     this.STREAM_PROCESS = spawn('bash', ['-c', this.COMMANDS.stream], {
@@ -157,6 +164,8 @@ export class CameraDriver {
 
     if (this.STREAM_PROCESS.stdout?.listenerCount('data') === 0)
       this.STREAM_PROCESS.stdout.on('data', sendFrame);
+
+    return;
   }
 
   /**
@@ -182,6 +191,10 @@ export class CameraDriver {
    * This will run capture test, stream test
    */
   static async checkup() {
+    if (!this.STATUS)
+      return new Error(
+        'Device status on driver is still undetermined, please call status() to ensure device availability'
+      );
     let safe = true;
 
     const lock = await this.RESOURCE.acquire();

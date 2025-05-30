@@ -1,4 +1,4 @@
-import { CameraDriver } from 'main/drivers/camera';
+import { CameraDriver } from '../drivers/camera';
 
 export class CameraService {
   static async status() {

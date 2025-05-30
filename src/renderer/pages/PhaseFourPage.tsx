@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import Button from 'renderer/components/Button';
 import CameraPreview from 'renderer/components/CameraPreview';
+import LoadingAnimation from 'renderer/components/LoadingAnimation';
 import Page from 'renderer/components/Page';
 import { usePhase } from 'renderer/contexts/PhaseContext';
 
@@ -12,26 +14,37 @@ import { usePhase } from 'renderer/contexts/PhaseContext';
  */
 export default function PhaseFourPage() {
   const phase = usePhase();
+  const [isRun, setIsRun] = useState(true);
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    setIsRun(false);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     phase.next();
   };
 
+  if (isRun)
+    return (
+      <Page className="flex flex-col justify-between items-center">
+        <h1 className="text-8xl font-bold">Are you ready?</h1>
+
+        <div className="relative rounded-xl">
+          <CameraPreview />
+        </div>
+
+        <Button
+          onClick={() => {
+            handleNext();
+          }}
+        >
+          Yeah!
+        </Button>
+      </Page>
+    );
+
   return (
-    <Page className="flex flex-col justify-between items-center">
-      <h1 className="text-8xl font-bold">Are you ready?</h1>
-
-      <div className="relative rounded-xl">
-        <CameraPreview />
-      </div>
-
-      <Button
-        onClick={() => {
-          handleNext();
-        }}
-      >
-        Yeah!
-      </Button>
+    <Page className="flex flex-col justify-evently items-center">
+      <h1 className="text-4xl font-bold">Loading...</h1>
+      <LoadingAnimation />
     </Page>
   );
 }

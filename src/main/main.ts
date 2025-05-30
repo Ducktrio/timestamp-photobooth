@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { ViewfinderService } from './services/viewfinder_service';
 
 export default class AppUpdater {
   constructor() {
@@ -84,6 +85,9 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   mainWindow.setFullScreen(true);
+  // Run viewfinder instance immediately
+  // Opens web socket
+  ViewfinderService(mainWindow!);
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -93,7 +97,6 @@ const createWindow = async () => {
     mainWindow.setKiosk(true);
     mainWindow.maximize();
   });
-
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
   });
@@ -101,7 +104,6 @@ const createWindow = async () => {
   mainWindow.webContents.addListener('will-navigate', (ev) => {
     ev.preventDefault();
   });
-
   mainWindow.on('closed', () => {
     mainWindow = null;
   });

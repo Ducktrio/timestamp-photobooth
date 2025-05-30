@@ -59,12 +59,18 @@ export default function PhaseFivePage() {
   return (
     <>
       <ViewfinderPage />
-      <Page className="flex flex-col justify-between items-center">
-        <h1 className="text-4xl">Make a Pose!</h1>
-        <div className="flex flex-row w-full justify-evenly items-center">
-          <CaptureGallery sources={srcs} />
+      <Page className="flex flex-col justify-between items-center z-[1]">
+        <h1 className="text-4xl z-[1] text-surface font-bold">Make a Pose!</h1>
+        <div className="flex flex-row w-full justify-evenly items-center z-[1] p-8">
+          <CaptureGallery
+            className={
+              state === State.ONGOING ? 'relative bottom-[-20rem]' : ''
+            }
+            sources={srcs}
+          />
           <Button
             disabled={state === State.ONGOING}
+            variant="fill"
             onClick={() => {
               handleStart();
             }}

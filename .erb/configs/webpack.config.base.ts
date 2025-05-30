@@ -5,6 +5,7 @@
 import webpack from 'webpack';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
+import path from 'path/posix';
 
 const configuration: webpack.Configuration = {
   externals: [...Object.keys(externals || {})],
@@ -49,6 +50,11 @@ const configuration: webpack.Configuration = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     modules: [webpackPaths.srcPath, 'node_modules'],
+    alias: {
+      ws: path.resolve(
+        path.join(webpackPaths.srcNodeModulesPath, 'ws/index.js')
+      ), // Fix for WS library problem with ESM
+    },
   },
 
   plugins: [

@@ -33,6 +33,10 @@ const configuration: webpack.Configuration = {
           },
         ],
       },
+      {
+        test: /\.node$/,
+        use: 'native-addon-loader',
+      },
     ],
   },
 
@@ -48,13 +52,8 @@ const configuration: webpack.Configuration = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.node'],
     modules: [webpackPaths.srcPath, 'node_modules'],
-    alias: {
-      ws: path.resolve(
-        path.join(webpackPaths.srcNodeModulesPath, 'ws/index.js')
-      ), // Fix for WS library problem with ESM
-    },
   },
 
   plugins: [

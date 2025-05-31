@@ -23,6 +23,7 @@ export class FileService {
   public async scanFolders() {
     await Promise.all([
       Object.values(this.FOLDERPATH).map((value) => {
+        console.log(path.resolve(value));
         return ensureFolderExists(value);
       }),
     ]);

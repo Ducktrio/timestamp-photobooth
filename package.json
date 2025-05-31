@@ -114,6 +114,7 @@
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.7",
     "electron-updater": "^5.0.1",
+    "native-addon-loader": "^2.0.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -121,6 +122,7 @@
     "slick-carousel": "^1.8.1",
     "tailwind-scrollbar-hide": "^2.0.0",
     "timers-browserify": "^2.0.12",
+    "ts-jest-resolver": "^2.0.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
@@ -183,7 +185,7 @@
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.4.17",
     "terser-webpack-plugin": "^5.3.1",
-    "ts-jest": "^28.0.2",
+    "ts-jest": "^28.0.8",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4",
@@ -271,5 +273,8 @@
       "src/main/*"
     ],
     "logLevel": "quiet"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.9"
   }
 }

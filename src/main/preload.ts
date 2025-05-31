@@ -26,7 +26,6 @@ contextBridge.exposeInMainWorld('electron', {
         : null,
     ENV: process.env.NODE_ENV,
   },
-  onStream: (chunk: Uint8Array) => {
-    return null;
-  },
+  onStream: (callback: (chunk: Uint8Array) => void) =>
+    ipcRenderer.on('stream', (_, frame) => callback(frame)),
 });

@@ -49,7 +49,7 @@ export default function Button({
           styles[type][variant]
         } ${className} ${
           disabled
-            ? 'border-1 border-surface bg-surface-container-low shadow-inset active:bg-surface'
+            ? 'border-1 border-surface bg-surface-container-low shadow-inset active:bg-surface text-on-surface'
             : ''
         }`}
         onClick={onClick}

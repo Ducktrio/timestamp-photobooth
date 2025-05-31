@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 
 export default function useViewfinder() {
-  const [ws, setWs] = useState<WebSocket | null>(null);
   const [chunks, setChunks] = useState<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    if (ws) stream();
+    const socket = new WebSocket('ws://localhost:8080');
 
-    const newWs = new WebSocket('ws://localhost:8080');
-
-    newWs.onerror = (ev: Event) => {
+    socket.onerror = (ev) => {
       console.error(ev);
       return;
     };
 
-    newWs.onopen = () => {
-      setWs(newWs);
+    socket.onopen = () => {
+      stream();
     };
-  }, [ws]);
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   const stream = () => {
     let imageBuffer: Uint8Array[] = [];

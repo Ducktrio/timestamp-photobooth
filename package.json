@@ -134,8 +134,7 @@
     "tailwind-scrollbar-hide": "^2.0.0",
     "timers-browserify": "^2.0.12",
     "ts-jest-resolver": "^2.0.1",
-    "winston": "^3.17.0",
-    "ws": "^8.18.2"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.6",

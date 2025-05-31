@@ -37,14 +37,6 @@ const configuration: webpack.Configuration = {
     path: webpackPaths.distMainPath,
     filename: '[name].js',
   },
-  module: {
-    rules: [
-      {
-        test: /\.node$/,
-        use: 'native-addon-loader',
-      },
-    ],
-  },
 
   optimization: {
     minimizer: [

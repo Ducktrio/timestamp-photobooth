@@ -21,7 +21,10 @@ export default function CaptureGallery({
             key={index}
             className="flex h-[12rem] w-[24rem] bg-surface-container-high shadow-lg object-cover rounded-xl"
           >
-            <LazyImage src={src} className="rounded-xl object-cover" />
+            <LazyImage
+              src={`file://${src}`}
+              className="rounded-xl object-cover"
+            />
           </div>
         ))}
       </div>

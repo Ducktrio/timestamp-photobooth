@@ -17,6 +17,26 @@ declare global {
         ENV: string;
       };
       onStream: (callback: (chunk: Uint8Array) => void) => void;
+
+      camera: {
+        status(): Promise<void>;
+        capture(): Promise<void>;
+      };
+      media: {
+        /**
+         * @param {string} url - url representation of the data | buffer | blob
+         */
+        saveMotion(url: string): void;
+      };
+      session: {
+        /**
+         * Begin new session
+         */
+        begin(): Promise<void>;
+      };
+      file: {
+        getCaptures(): Promise<string[]>;
+      };
     };
   }
 }

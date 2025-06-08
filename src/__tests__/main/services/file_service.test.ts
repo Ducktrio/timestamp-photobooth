@@ -21,7 +21,7 @@ describe('FileService', () => {
   afterAll(() => {
     deleteFolderSync(app.getPath('userData'));
   });
-  it('ensure folder exists', async () => {
+  it('should fuck the folder path', async () => {
     await File.scanFolders();
 
     // IDK why but the promise all from scanFolders() have early resolve issue, have to wait a second
@@ -30,6 +30,5 @@ describe('FileService', () => {
       return folderExistsSync(value);
     });
     expect(doesExists).toEqual([true, true, true, true]);
-
   });
 });

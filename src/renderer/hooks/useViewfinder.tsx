@@ -1,26 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export default function useViewfinder() {
+export default function useViewfinder(pause: boolean = false) {
   const [chunks, setChunks] = useState<HTMLImageElement | null>(null);
+  const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8080');
-
-    socket.onerror = (ev) => {
-      console.error(ev);
-      return;
-    };
-
-    socket.onopen = () => {
-      stream();
-    };
+    if (!ws.current && !pause) stream();
+    if (pause)
+      if (ws.current) {
+        ws.current.close();
+        ws.current = null;
+      }
 
     return () => {
-      socket.close();
+      if (ws.current) {
+        ws.current.close();
+        ws.current = null;
+      }
     };
-  }, []);
+  }, [pause]);
 
   const stream = () => {
+    ws.current = new WebSocket('ws://localhost:8080');
+    ws.current.binaryType = 'blob';
+
     let imageBuffer: Uint8Array[] = [];
     window.electron.onStream((chunk) => {
       if (chunk === undefined || chunk === null) return;
@@ -38,6 +41,9 @@ export default function useViewfinder() {
       setChunks(img);
       imageBuffer = [];
     });
+    ws.current.onclose = () => {
+      ws.current = null;
+    };
   };
 
   return chunks;

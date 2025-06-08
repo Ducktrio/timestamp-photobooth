@@ -16,6 +16,18 @@ export class FileService {
     motions: this.userDataPath + '/motions/',
   };
 
+  public captureDir() {
+    return path.resolve(this.FOLDERPATH.captures);
+  }
+
+  public exportDir() {
+    return path.resolve(this.FOLDERPATH.exports);
+  }
+
+  public motionDir() {
+    return path.resolve(this.FOLDERPATH.motions);
+  }
+
   /**
    * Scans working directory of session as specified in FOLDERPATH
    * Create folders if not yet exist

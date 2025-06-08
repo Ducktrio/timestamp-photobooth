@@ -1,9 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { sessionData } from 'renderer/contexts/DataContext';
+import useBorderline from 'renderer/hooks/useBorderline';
+import useMotion from 'renderer/hooks/useMotion';
 import useViewfinder from 'renderer/hooks/useViewfinder';
 
-export default function ViewfinderPage({}: { className?: string }) {
+export default function ViewfinderPage({
+  record = false,
+  pause = false,
+}: {
+  className?: string;
+  record: boolean;
+  pause: boolean;
+}) {
   const screen = useRef<HTMLCanvasElement | null>(null);
-  const streams = useViewfinder();
+  const streams = useViewfinder(pause);
+  const motion = useMotion(screen.current!);
+  const data = sessionData();
+  const [height, setHeight] = useState(0);
+  const [bWidth, bHeight] = useBorderline(data.frame!, height);
 
   useEffect(() => {
     const canvas = screen.current?.getContext('2d');
@@ -17,16 +31,29 @@ export default function ViewfinderPage({}: { className?: string }) {
           screen.current?.height!
         );
         URL.revokeObjectURL(streams!.src);
-      };
+        canvas?.beginPath();
+        canvas?.setLineDash([5, 5]);
+        canvas!.strokeStyle = 'red';
+        canvas!.lineWidth = 2;
 
-    if (!streams)
-      canvas?.fillRect(
-        0,
-        0,
-        screen.current?.width as number,
-        screen.current?.height as number
-      );
+        let x = screen.current?.width! / 2 - bWidth / 2;
+        let y = 0;
+        let w = bWidth;
+        let h = bHeight;
+
+        canvas?.strokeRect(x, y, w, h);
+      };
+    setHeight(screen.current?.height!);
   }, [streams]);
+
+  useEffect(() => {
+    if (record) motion.run();
+    else motion.stop();
+
+    return () => {
+      motion.stop();
+    };
+  }, [record]);
 
   return (
     <canvas

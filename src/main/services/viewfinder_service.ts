@@ -21,8 +21,12 @@ export const ViewfinderService = (window: BrowserWindow) => {
     });
 
     ws.on('close', async () => {
+      console.log('a socket client disconnected');
       await CameraDriver.stop_stream();
     });
+  });
+  wss.on('close', () => {
+    console.log('socket closed');
   });
   return;
 };

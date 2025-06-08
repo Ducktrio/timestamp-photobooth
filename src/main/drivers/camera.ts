@@ -1,11 +1,10 @@
 import { ChildProcess, spawn } from 'child_process';
 import { Locking, Semaphore } from '../helpers/semaphore';
 import { once } from 'events';
-import {
-  deleteFileSync,
-  fileExistsSync,
-  folderExistsSync,
-} from '../utilities/filesystem.sync';
+import { fileExistsSync, folderExistsSync } from '../utilities/filesystem.sync';
+import { deleteFile, fileExists } from '../utilities/filesystem';
+import { File } from '../services/file_service';
+import process from 'process';
 
 enum DeviceStatus {
   INACTIVE = 'inactive',
@@ -16,16 +15,22 @@ export class CameraDriver {
   private static RESOURCE = new Semaphore('camera', 1);
   private static FILE_INDEX: number = 1;
   private static STATUS: DeviceStatus = DeviceStatus.INACTIVE;
-  private static FOLDER_PATH = '';
-  private static STREAM_PROCESS: ChildProcess;
-  private static STREAM_LOCK: Locking;
-  private static TEST_FILE_PATH = process.cwd() + '/test-captures/capture.jpg';
+  private static FOLDER_PATH = File.captureDir();
+  private static STREAM_PROCESS: ChildProcess | null;
+  private static STREAM_LOCK: Locking | null;
+  public static TEST_FILE_PATH = process.cwd() + '/test-captures/capture.jpg';
+  private static DEBUG_LOGGING = true;
 
   private static COMMANDS = {
     status: 'gphoto2 --auto-detect',
 
     get capture() {
-      return `gphoto2 --capture-image-and-download --filename ${CameraDriver.FOLDER_PATH}capture-${CameraDriver.FILE_INDEX}.jpg`;
+      console.log(
+        'GETTER capture command',
+        CameraDriver.FOLDER_PATH,
+        File.captureDir()
+      );
+      return `gphoto2 --capture-image-and-download --filename ${CameraDriver.FOLDER_PATH}/capture-${CameraDriver.FILE_INDEX}.jpg`;
     },
 
     get stream() {
@@ -111,33 +116,47 @@ export class CameraDriver {
    * @returns {Promise<string>} path of the capture file
    */
   static async capture() {
-    if (!this.STATUS)
+    if (!this.STATUS) {
+      console.log('status undefined');
       return new Error(
         'Device status on driver is still undetermined, please call status() to ensure device availability'
       );
+    }
     // checks if there is any residue (captures from previous session) exists
     try {
       const checkPath = `${this.FOLDER_PATH}capture-${CameraDriver.FILE_INDEX}.jpg`;
-      if (fileExistsSync(checkPath)) deleteFileSync(checkPath);
+      if (await fileExists(checkPath)) await deleteFile(checkPath);
     } catch (error) {
       throw error;
     }
 
     const lock = await this.RESOURCE.acquire();
 
-    const process = spawn('bash', ['-c', this.COMMANDS.capture]);
+    const bash = spawn(
+      'bash',
+      [
+        '-c',
+        `gphoto2 --capture-image-and-download --filename capture-${this.FILE_INDEX}.jpg`,
+      ],
+      {
+        env: { ELECTRON_RUN_AS_NODE: '1' },
+        uid: process.getuid(),
+        gid: process.getgid(),
+        cwd: File.captureDir(),
+      }
+    );
 
-    process.on('error', (error) => {
+    bash.on('error', (error) => {
       lock.release();
       throw new Error(`Cannot trigger capture to camera: ${error}`);
     });
 
-    process.stderr.on('data', (data) => {
+    bash.stderr.on('data', (data) => {
       lock.release();
       throw new Error(`Cannot trigger capture to camera: ${data.toString()}`);
     });
 
-    await once(process, 'close');
+    await once(bash, 'close');
     lock.release();
     this.FILE_INDEX++;
 
@@ -154,7 +173,8 @@ export class CameraDriver {
       return new Error(
         'Device status on driver is still undetermined, please call status() to ensure device availability'
       );
-    this.STREAM_LOCK = await this.RESOURCE.acquire();
+
+    if (!this.STREAM_LOCK) this.STREAM_LOCK = await this.RESOURCE.acquire();
 
     this.STREAM_PROCESS = spawn('bash', ['-c', this.COMMANDS.stream], {
       stdio: ['ignore', 'pipe', 'ignore'],
@@ -176,10 +196,12 @@ export class CameraDriver {
       try {
         this.STREAM_PROCESS.stdout?.removeAllListeners('data');
         this.STREAM_PROCESS.kill('SIGINT');
+        this.STREAM_PROCESS = null;
 
         // This is an important thing to let the camera procecss stream deactivation
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        this.STREAM_LOCK.release();
+        this.STREAM_LOCK?.release();
+        this.STREAM_LOCK = null;
       } catch (error) {
         throw error;
       }

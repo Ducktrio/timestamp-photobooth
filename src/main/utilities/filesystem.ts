@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { Stream } from 'stream';
 
 /**
  * Check if a folder exists and is a directory.
@@ -44,7 +45,15 @@ export async function readFile(filePath: string): Promise<string> {
 /**
  * Write data to a file (creates or overwrites).
  */
-export async function writeFile(filePath: string, data: string): Promise<void> {
+export async function writeFile(
+  filePath: string,
+  data:
+    | string
+    | NodeJS.ArrayBufferView
+    | Iterable<string | NodeJS.ArrayBufferView>
+    | AsyncIterable<string | NodeJS.ArrayBufferView>
+    | Stream
+): Promise<void> {
   await fs.writeFile(path.resolve(filePath), data, 'utf-8');
 }
 

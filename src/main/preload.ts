@@ -3,6 +3,24 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
+  camera: {
+    status: async () => ipcRenderer.invoke('camera/status'),
+    async capture() {
+      console.log('[MAIN] invoking capture');
+      await ipcRenderer.invoke('camera/capture');
+    },
+  },
+  file: {
+    getCaptures: async () => ipcRenderer.invoke('file/getCaptures'),
+  },
+  media: {
+    saveMotion(url: string) {
+      ipcRenderer.send('media/motion', url);
+    },
+  },
+  session: {
+    begin: async () => ipcRenderer.invoke('session/begin'),
+  },
   ipcRenderer: {
     sendMessage(channel: Channels, args: unknown[]) {
       ipcRenderer.send(channel, args);

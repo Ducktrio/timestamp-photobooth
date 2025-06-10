@@ -44,7 +44,10 @@ export function readFileSync(filePath: string): string {
 /**
  * Write data to a file (creates or overwrites).
  */
-export function writeFileSync(filePath: string, data: string): void {
+export function writeFileSync(
+  filePath: string,
+  data: string | NodeJS.ArrayBufferView
+): void {
   fs.writeFileSync(path.resolve(filePath), data, 'utf-8');
 }
 

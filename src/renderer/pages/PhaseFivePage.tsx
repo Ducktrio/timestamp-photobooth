@@ -2,80 +2,93 @@ import { useEffect, useState } from 'react';
 import Button from 'renderer/components/Button';
 import CaptureGallery from 'renderer/components/CaptureGallery';
 import Page from 'renderer/components/Page';
-import ViewfinderPage from 'renderer/components/ViewfinderPage';
+import Viewfinder from 'renderer/components/Viewfinder';
 import { sessionData } from 'renderer/contexts/DataContext';
+import { usePhase } from 'renderer/contexts/PhaseContext';
+import useCameraTrigger from 'renderer/hooks/useCameraTrigger';
 import useCountdown from 'renderer/hooks/useCountdown';
+import useFetchCaptures from 'renderer/hooks/useFetchCaptures';
 
 enum State {
-  BEGIN,
-  ONGOING,
-  GAP,
+  COUNTING,
+  CAPTURING,
+  READY,
   FINISH,
 }
 
 export default function PhaseFivePage() {
   const data = sessionData();
-
   const INTERVAL = 5;
-  const MAX_STAGE = 2 * 2;
 
-  const srcs = [
-    'file:///home/wakugumi/Project/timestamp-photobooth/release/app/test_1.png',
-    'file:///home/wakugumi/Project/timestamp-photobooth/release/app/test_2.png',
+  //const MAX_STAGE = 2 * 2;
+  const MAX_STAGE = data.count;
+  const [stage, setStage] = useState<number>(1);
+  const [state, setState] = useState<State>(State.READY);
+  const [timer, trigger] = useCountdown(INTERVAL, state === State.COUNTING);
+  const camera = useCameraTrigger();
+  const srcs = useFetchCaptures(stage);
+  const phase = usePhase();
 
-    'file:///home/wakugumi/Project/timestamp-photobooth/release/app/test_3.png',
-  ];
-
-  const [stage, setStage] = useState<number>(0);
-  const [state, setState] = useState<State>(State.BEGIN);
-
-  const [timer, trigger] = useCountdown(INTERVAL, state === State.ONGOING);
-
+  /**
+   * Effect runs when timer runs out
+   */
   useEffect(() => {
-    setStage(stage + 1);
+    if (state === State.READY) return;
+    (async () => {
+      setState(State.CAPTURING);
 
-    if (stage >= MAX_STAGE) {
-      setState(State.FINISH);
-      return;
-    }
-    setState(State.GAP);
+      // trigger camera capture
+      await camera.trigger();
 
-    console.log('TRIGGER');
+      setStage(stage + 1);
+
+      if (stage >= MAX_STAGE) {
+        setState(State.FINISH);
+        return;
+      }
+
+      setState(State.READY);
+    })();
   }, [trigger]);
 
+  /**
+   * Start counting (the timer hook starts)
+   */
   const handleStart = () => {
-    setState(State.ONGOING);
+    setState(State.COUNTING);
   };
 
-  if (state === State.FINISH)
-    return (
-      <>
-        <Page className="flex flex-col justify-between items-center">
-          <CaptureGallery sources={srcs} />
-        </Page>
-      </>
-    );
-
+  if (state === State.FINISH) {
+    phase.next();
+  }
   return (
     <>
-      <ViewfinderPage />
-      <Page className="flex flex-col justify-between items-center z-[1]">
+      {
+        // record attribute only when its counting to capture}
+        <Viewfinder pause={state === State.CAPTURING} />
+      }
+      <Page className="flex flex-col justify-between items-center z-[1] overflow-y-hidden">
         <h1 className="text-4xl z-[1] text-surface font-bold">Make a Pose!</h1>
         <div className="flex flex-row w-full justify-evenly items-center z-[1] p-8">
           <CaptureGallery
-            className={
-              state === State.ONGOING ? 'relative bottom-[-20rem]' : ''
-            }
+            className={`flex-1 space-x-4 ${
+              state === State.COUNTING ? 'hidden' : ''
+            }`}
             sources={srcs}
           />
           <Button
-            disabled={state === State.ONGOING}
+            className="flex-none"
+            disabled={state === State.COUNTING || state === State.CAPTURING}
             variant="fill"
             onClick={() => {
               handleStart();
             }}
           >
-            {state === State.GAP ? 'Continue' : timer}
+            {state === State.READY
+              ? 'Continue'
+              : state === State.CAPTURING
+              ? 'Processing'
+              : timer}
           </Button>
         </div>
       </Page>

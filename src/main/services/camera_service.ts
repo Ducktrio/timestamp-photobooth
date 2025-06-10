@@ -9,5 +9,11 @@ export class CameraService {
     }
   }
 
-  static async capture() {}
+  static async capture() {
+    try {
+      await CameraDriver.capture();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

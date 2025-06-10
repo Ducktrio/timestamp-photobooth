@@ -15,6 +15,10 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { ViewfinderService } from './services/viewfinder_service';
+import { registerCameraHandler } from './handlers/camera_handler';
+import { registerMediaHandler } from './handlers/media_handler';
+import { registerSessionHandlers } from './handlers/session_handler';
+import { registerFileHandlers } from './handlers/file_handler';
 
 export default class AppUpdater {
   constructor() {
@@ -23,13 +27,16 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
 let mainWindow: BrowserWindow | null = null;
-
+registerCameraHandler();
+registerMediaHandler();
+registerSessionHandlers();
+registerFileHandlers();
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+  console.log(app.getPath('userData'));
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -80,6 +87,8 @@ const createWindow = async () => {
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
       webSecurity: false,
+      sandbox: false,
+      contextIsolation: true,
     },
   });
 
@@ -138,6 +147,7 @@ app
   .whenReady()
   .then(() => {
     createWindow();
+
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.

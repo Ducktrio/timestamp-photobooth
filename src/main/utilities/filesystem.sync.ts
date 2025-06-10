@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Stream } from 'stream';
 
 /**
  * Check if a folder exists and is a directory.

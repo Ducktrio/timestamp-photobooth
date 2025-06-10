@@ -2,7 +2,7 @@ import { FabricImage, filters } from 'fabric';
 import API from '../modules/API';
 import { FilterPreset } from '../interfaces/ImageFilter';
 
-const api = new API(window.config.BOOTH_TOKEN);
+const api = new API(window.electron.config.BOOTH_TOKEN);
 export default class ImageFilterService {
   static async getFilters() {
     const presets: FilterPreset[] = [

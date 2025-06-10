@@ -12,9 +12,8 @@ import 'aos/dist/aos.css'; // You can also use <link> for styles
 import PhaseTwoPage from './pages/PhaseTwoPage';
 import PhaseThreePage from './pages/PhaseThreePage';
 import PhaseFourPage from './pages/PhaseFourPage';
-import BoothManager from './services/BoothManager';
-import useScript from './hooks/useScript';
 import PhaseFivePage from './pages/PhaseFivePage';
+import PhaseSixPage from './pages/PhaseSixPage';
 AOS.init({
   duration: 1500,
   mirror: true,
@@ -36,6 +35,7 @@ export default function App() {
                 <Route path="/phase3" element={<PhaseThreePage />}></Route>
                 <Route path="/phase4" element={<PhaseFourPage />}></Route>
                 <Route path="/phase5" element={<PhaseFivePage />}></Route>
+                <Route path="/phase6" element={<PhaseSixPage />}></Route>
               </Routes>
             </AppInitiators>
           </PhaseProvider>

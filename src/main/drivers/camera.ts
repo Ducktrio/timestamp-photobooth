@@ -136,7 +136,7 @@ export class CameraDriver {
       'bash',
       [
         '-c',
-        `gphoto2 --capture-image-and-download --filename capture-${this.FILE_INDEX}.jpg`,
+        `gphoto2 --capture-image-and-download --filename capture-${this.FILE_INDEX}.jpg --force-overwrite`,
       ],
       {
         env: { ELECTRON_RUN_AS_NODE: '1' },

@@ -49,6 +49,6 @@ export default class BoothManager {
           reject(error);
         });
     });
-    await window.electron.session.begin();
+    // await window.electron.session.begin();
   }
 }

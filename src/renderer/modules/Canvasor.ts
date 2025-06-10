@@ -23,7 +23,7 @@ Fabric.FabricImage.customProperties = ['name', 'id'];
  * @param {HTMLCanvasElement} canvas - Reference to the canvas element
  * @param {Frame} frame - Frame to use
  */
-export default class CanvasFraming {
+export default class Canvasor {
   private container: HTMLDivElement;
   private canvas: HTMLCanvasElement;
   private frame: Frame;

@@ -1,7 +1,7 @@
-import * as Fabric from 'fabric';
 import Frame, { Layout } from '../interfaces/Frame';
 import { FilterPreset } from '../interfaces/ImageFilter';
 import ImageFilterService from '../services/ImageFilterService';
+import * as Fabric from 'fabric';
 
 declare module 'fabric' {
   interface SerializedObjectProps {
@@ -15,7 +15,6 @@ declare module 'fabric' {
 }
 
 Fabric.FabricObject.customProperties = ['name', 'id'];
-Fabric.FabricImage.customProperties = ['name', 'id'];
 
 /**
  * Tools to position pictures in a frame as HTML canvas

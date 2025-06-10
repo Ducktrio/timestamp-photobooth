@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import Button from 'renderer/components/Button';
 import LazyImage from 'renderer/components/LazyImage';
 import Page from 'renderer/components/Page';
+import Stepper from 'renderer/components/Stepper';
 import { sessionData } from 'renderer/contexts/DataContext';
+import { usePhase } from 'renderer/contexts/PhaseContext';
 import useFetchCaptures from 'renderer/hooks/useFetchCaptures';
 import { Layout } from 'renderer/interfaces/Frame';
 import Canvasor from 'renderer/modules/Canvasor';
@@ -12,8 +14,10 @@ export default function PhaseSixPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasor = useRef<Canvasor | null>(null);
   const data = sessionData();
+  const phase = usePhase();
 
   const pictures = useFetchCaptures();
+  const [selected, setSelected] = useState<string[]>([]);
   const [slots, setSlots] = useState<Layout[]>([]);
 
   useEffect(() => {
@@ -37,16 +41,24 @@ export default function PhaseSixPage() {
 
   const handlePick = async (layout: Layout, src: string) => {
     canvasor.current?.addPicture(layout, `file://${src}`);
+    setSelected([...selected.flat(), src]);
   };
   const handleReset = async () => {
+    setSelected([]);
     await canvasor.current?.dispose();
     await canvasor.current?.create();
     setSlots(data.frame?.layouts.flat()!);
   };
 
+  const handleConfirm = () => {
+    data.setPictures(selected);
+    phase.next();
+  };
+
   return (
     <>
       <Page className="flex items-stretch justify-center">
+        <Stepper stage={1} className="my-auto" />
         {/** Preview */}
         <div
           className="flex-1 flex items-center justify-center max-h-[80vh]"
@@ -78,13 +90,23 @@ export default function PhaseSixPage() {
               </button>
             ))}
           </div>
-          <div className="flex">
+          <div className="flex flex-row gap-12 justify-between">
             <Button
-              type="tertiary"
+              type="primary"
               variant="outline"
               onClick={() => handleReset()}
+              className="mx-auto"
             >
               Reset
+            </Button>
+            <Button
+              type="primary"
+              variant="fill"
+              disabled={slots.length > 0}
+              onClick={() => handleConfirm()}
+              className="mx-auto"
+            >
+              Confirm
             </Button>
           </div>
         </div>

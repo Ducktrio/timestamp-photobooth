@@ -17,6 +17,15 @@ contextBridge.exposeInMainWorld('electron', {
     saveMotion(url: string) {
       ipcRenderer.send('media/motion', url);
     },
+    async renderVideo() {
+      await ipcRenderer.invoke('media/render');
+    },
+    saveCanvas(url: string) {
+      ipcRenderer.send('media/canvas', url);
+    },
+    print(url: string, quantity: number, split: boolean) {
+      ipcRenderer.invoke('media/print', url, quantity, split);
+    },
   },
   session: {
     begin: async () => ipcRenderer.invoke('session/begin'),

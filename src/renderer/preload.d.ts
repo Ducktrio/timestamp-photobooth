@@ -27,6 +27,24 @@ declare global {
          * @param {string} url - url representation of the data | buffer | blob
          */
         saveMotion(url: string): void;
+
+        /**
+         * Starts video render procedure to backend
+         */
+        renderVideo(): Promise<void>;
+
+        /**
+         * Save canvas
+         */
+        saveCanvas(url: string): void;
+
+        /**
+         * Invoke print procedure
+         * @param {string} url - url representation of the canvas
+         * @param {number} quantity - number of prints
+         * @param {boolean} split - split the paper or not
+         */
+        print(url: string, quantity: number, split: boolean): void;
       };
       session: {
         /**

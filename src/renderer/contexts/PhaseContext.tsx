@@ -5,6 +5,7 @@ interface PhaseContextValue {
   currentPhase: number;
   jumpTo: (phase: number) => void;
   next: () => void;
+  previous: () => void;
   restart: () => void;
 }
 
@@ -22,6 +23,11 @@ export const PhaseProvider: React.FC<{ children: React.ReactNode }> = ({
     // SessionService.next();
   };
 
+  const previous = () => {
+    navigate(`/phase${currentPhase - 1}`);
+    setPhase(currentPhase - 1);
+  };
+
   const jumpTo = (destination: number) => {
     setPhase(destination);
     navigate(`/phase${destination}`);
@@ -33,7 +39,9 @@ export const PhaseProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <PhaseContext.Provider value={{ currentPhase, jumpTo, next, restart }}>
+    <PhaseContext.Provider
+      value={{ currentPhase, jumpTo, next, previous, restart }}
+    >
       {children}
     </PhaseContext.Provider>
   );

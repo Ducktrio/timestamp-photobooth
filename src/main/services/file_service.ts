@@ -42,6 +42,13 @@ export class FileService {
   }
 
   /**
+   * Get absolute path of the print file
+   */
+  public getPrintExport() {
+    return path.join(this.exportDir(), 'print.jpg');
+  }
+
+  /**
    * Get list of exports files
    *
    * Video, rendered frame, print file included.

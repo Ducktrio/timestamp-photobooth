@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron/main';
+import { ipcMain } from 'electron';
 import { File } from '../services/file_service';
 
 export const registerFileHandlers = () => {

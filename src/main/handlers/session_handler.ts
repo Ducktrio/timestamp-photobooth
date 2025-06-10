@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron/main';
+import { ipcMain } from 'electron';
 import { CameraDriver } from '../drivers/camera';
 import { File } from '../services/file_service';
 

@@ -1,8 +1,27 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import logger from './utilities/logger';
 
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
+  logger: {
+    error(message: string, ...args: string[]) {
+      logger.error(message, ...args);
+    },
+    warn(message: string, ...args: string[]) {
+      logger.warn(message, ...args);
+    },
+    info(message: string, ...args: string[]) {
+      logger.info(message, ...args);
+    },
+    trace(message: string, ...args: string[]) {
+      logger.trace(message, ...args);
+    },
+
+    debug(message: string, ...args: string[]) {
+      logger.debug(message, ...args);
+    },
+  },
   camera: {
     status: async () => ipcRenderer.invoke('camera/status'),
     async capture() {
@@ -54,7 +73,7 @@ contextBridge.exposeInMainWorld('electron', {
   config: {
     BOOTH_TOKEN: process.env.BOOTH_TOKEN,
     SNAP_SCRIPT:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development'
         ? 'https://app.sandbox.midtrans.com/snap/snap.js'
         : null,
     ENV: process.env.NODE_ENV,

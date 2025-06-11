@@ -21,7 +21,7 @@ describe('FileService', () => {
   afterAll(() => {
     deleteFolderSync(app.getPath('userData'));
   });
-  it('should fuck the folder path', async () => {
+  it('should scan the folder path', async () => {
     await File.scanFolders();
 
     // IDK why but the promise all from scanFolders() have early resolve issue, have to wait a second

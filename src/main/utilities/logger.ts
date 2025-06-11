@@ -2,6 +2,7 @@ import { logLevels } from '../shared/logLevels';
 import winston, { createLogger, format, Logger, transports } from 'winston';
 import { app } from 'electron';
 import path from 'path';
+import { HttpPostTransport } from './HttpPostTransport';
 
 const formatter = format.printf(({ level, message, label, timestamp }) => {
   return `${timestamp} ${label} [${level}]: ${message}`;
@@ -27,6 +28,12 @@ class LoggerFactory {
       transports: [
         new transports.Console({
           format: format.colorize({ all: true }),
+        }),
+        new HttpPostTransport({
+          endpoint: 'https://timestamp.fun/api/boothLogs',
+          headers: {
+            Token: process.env.BOOTH_TOKEN,
+          },
         }),
         this.environment != 'dev'
           ? new transports.File({ filename: logFilePath })

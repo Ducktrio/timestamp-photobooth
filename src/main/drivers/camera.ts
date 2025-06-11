@@ -5,6 +5,7 @@ import { fileExistsSync, folderExistsSync } from '../utilities/filesystem.sync';
 import { deleteFile, fileExists } from '../utilities/filesystem';
 import { File } from '../services/file_service';
 import process from 'process';
+import logger from '../utilities/logger';
 
 enum DeviceStatus {
   INACTIVE = 'inactive',
@@ -25,11 +26,6 @@ export class CameraDriver {
     status: 'gphoto2 --auto-detect',
 
     get capture() {
-      console.log(
-        'GETTER capture command',
-        CameraDriver.FOLDER_PATH,
-        File.captureDir()
-      );
       return `gphoto2 --capture-image-and-download --filename ${CameraDriver.FOLDER_PATH}/capture-${CameraDriver.FILE_INDEX}.jpg`;
     },
 
@@ -67,6 +63,8 @@ export class CameraDriver {
    * ! Only use this where resetting session, otherwise the next captures may replace existing ones
    */
   static reset_index() {
+    if (this.DEBUG_LOGGING)
+      logger.trace('[Camera Driver] resetting file index');
     this.FILE_INDEX = 1;
   }
 

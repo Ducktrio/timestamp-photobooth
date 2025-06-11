@@ -36,10 +36,14 @@ export default function PhaseThreePage() {
     (async () => {
       const token = await PaymentService.pay(data.frame!.id, data.quantity);
 
+      window.electron.logger.info('New transaction opened', token as string);
+
       setState(State.RUNNING);
 
       setToken(token!);
-    })();
+    })().catch((error) => {
+      throw error;
+    });
   }, []);
 
   const handleNext = () => {
@@ -54,13 +58,22 @@ export default function PhaseThreePage() {
       window.snap.pay(token, {
         onSuccess: function (result: PaymentCallback) {
           data.setPayment(result);
+          window.electron.logger.info(
+            'A transaction has been settled',
+            JSON.stringify(result)
+          );
           handleNext();
         },
         onPending: function () {},
         onClose: function () {
+          window.electron.logger.info('A payment request is closed by user');
           setState(State.ABORT);
         },
         onError: function (result: PaymentErrorCallback) {
+          window.electron.logger.warn(
+            'Error occured on an attempt of payment',
+            JSON.stringify(result)
+          );
           setState(State.ERROR);
           setError(new Error(result.status_message[0]));
         },

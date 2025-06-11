@@ -3,6 +3,16 @@ import { Channels } from 'main/preload';
 declare global {
   interface Window {
     electron: {
+      /**
+       * Logs to main process
+       */
+      logger: {
+        error(message: string, ...args: string[]): void;
+        warn(message: string, ...args: string[]): void;
+        info(message: string, ...args: string[]): void;
+        trace(message: string, ...args: string[]): void;
+        debug(message: string, ...args: string[]): void;
+      };
       ipcRenderer: {
         sendMessage(channel: Channels, args: unknown[]): void;
         on(

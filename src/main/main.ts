@@ -19,6 +19,28 @@ import { registerCameraHandler } from './handlers/camera_handler';
 import { registerMediaHandler } from './handlers/media_handler';
 import { registerSessionHandlers } from './handlers/session_handler';
 import { registerFileHandlers } from './handlers/file_handler';
+import * as dotenv from 'dotenv';
+import * as os from 'os';
+import { existsSync } from 'fs';
+
+// Env vars loader
+function loadEnv() {
+  const fallbackPaths = [
+    path.join(os.homedir(), '.timestamp.env'),
+    '/opt/timestamp/.env',
+    path.join(__dirname, '.env'), // fallback if bundled inside AppImage
+  ];
+
+  for (const envPath of fallbackPaths) {
+    if (existsSync(envPath)) {
+      dotenv.config({ path: envPath });
+      console.log(`✅ Loaded .env from: ${envPath}`);
+      return;
+    }
+  }
+
+  console.warn('⚠️ No .env file found in expected locations.');
+}
 
 export default class AppUpdater {
   constructor() {
@@ -143,9 +165,19 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
+
 app
   .whenReady()
   .then(() => {
+    loadEnv();
+
+    if (!process.env.BOOTH_TOKEN) {
+      console.error('❌ BOOTH_TOKEN is not set in .env!');
+      app.quit();
+      return;
+    }
+
     createWindow();
 
     app.on('activate', () => {

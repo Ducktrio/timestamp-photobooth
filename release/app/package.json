@@ -15,7 +15,7 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "fabric": "^6.7.0",
+    "fabric": "^5.5.2",
     "ws": "^8.18.2"
   }
 }

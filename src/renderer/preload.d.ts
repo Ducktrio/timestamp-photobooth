@@ -27,6 +27,31 @@ declare global {
          * @param {string} url - url representation of the data | buffer | blob
          */
         saveMotion(url: string): void;
+
+        /**
+         * Starts video render procedure to backend
+         */
+        renderVideo(): Promise<void>;
+
+        /**
+         * Save canvas
+         */
+        saveCanvas(url: string): void;
+
+        /**
+         * Invoke upload call
+         * @param {number} imageCount - number of preserved space for download (canvas + pictures)
+         * @param {string[]} captures - list of absolute path of captured pictures
+         */
+        upload(imageCount: number, captures: string[]): Promise<string>;
+
+        /**
+         * Invoke print procedure
+         * @param {string} url - url representation of the canvas
+         * @param {number} quantity - number of prints
+         * @param {boolean} split - split the paper or not
+         */
+        print(url: string, quantity: number, split: boolean): void;
       };
       session: {
         /**
@@ -36,6 +61,7 @@ declare global {
       };
       file: {
         getCaptures(): Promise<string[]>;
+        getVideo(): Promise<string>;
       };
     };
   }

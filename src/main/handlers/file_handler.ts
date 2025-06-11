@@ -9,4 +9,8 @@ export const registerFileHandlers = () => {
       throw error;
     }
   });
+
+  ipcMain.handle('file/getVideo', () => {
+    return File.getVideo();
+  });
 };

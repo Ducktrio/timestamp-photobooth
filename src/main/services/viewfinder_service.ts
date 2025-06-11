@@ -13,7 +13,7 @@ export const ViewfinderService = (window: BrowserWindow) => {
     CameraDriver.start_stream((chunk) => {
       buffer = Buffer.concat([buffer, chunk]);
 
-      if (buffer.length > 10000)
+      if (buffer.length > 1024)
         if (buffer.includes(Buffer.from([0xff, 0xd9]))) {
           window.webContents.send('stream', buffer);
           buffer = Buffer.alloc(0);

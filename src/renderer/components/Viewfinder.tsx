@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { sessionData } from 'renderer/contexts/DataContext';
 import useBorderline from 'renderer/hooks/useBorderline';
 import useMotion from 'renderer/hooks/useMotion';
+import useViewfinder from 'renderer/hooks/useViewfinder';
 
 interface ViewfinderProps {
   width?: string;
@@ -14,11 +15,15 @@ const Viewfinder = ({
   pause = false,
 }: ViewfinderProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const borderRef = useRef<HTMLCanvasElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const motion = useMotion(canvasRef.current!);
   let [bWidth, bHeight] = [0, 0];
+
+  const stream = useViewfinder(pause);
   const data = sessionData();
 
+  /**
   useEffect(() => {
     console.log('VIEWFINDER CALL');
 
@@ -45,7 +50,7 @@ const Viewfinder = ({
     };
   }, [pause]);
 
-  /** Video stream hander */
+  // Video stream hander
   const _videoStream = () => {
     console.log('Video stream called');
     if (!canvasRef.current) return;
@@ -107,11 +112,60 @@ const Viewfinder = ({
     });
     wsRef.current.onclose = () => console.log('socket disconnected');
   };
+  */
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (pause) motion.stop();
+    else motion.run();
+  }, [pause]);
+  useEffect(() => {
+    if (!borderRef.current) return;
+
+    const border = borderRef.current?.getContext('2d');
+    [bWidth, bHeight] = useBorderline(data.frame!, borderRef.current);
+    // draw borderline
+    border?.beginPath();
+    border?.setLineDash([2, 2]);
+    border!.strokeStyle = 'white';
+    border!.lineWidth = 1;
+
+    let x = (canvasRef.current?.width! - bWidth) / 2;
+    let y = (canvasRef.current?.height! - bHeight) / 2;
+    let w = bWidth;
+    let h = bHeight;
+    border?.strokeRect(x, y, w, h);
+  }, [borderRef.current]);
+  useEffect(() => {
+    if (!canvasRef.current || !stream) return;
+
+    const canvas = canvasRef.current.getContext('2d');
+    stream.onload = () => {
+      canvas?.drawImage(
+        stream,
+        0,
+        0,
+        canvasRef.current?.width!,
+        canvasRef.current?.height!
+      );
+    };
+  }, [stream]);
 
   return (
     <>
       <div className="fixed z-[0] top-0 left-0 flex items-center justify-center h-screen w-screen">
-        <canvas ref={canvasRef} width={width} height={height} />
+        <canvas
+          className="absolute left-0 top-0 z-[2]"
+          ref={borderRef}
+          width={width}
+          height={height}
+        />
+        <canvas
+          className="absolute left-0 top-0 z-[1]"
+          ref={canvasRef}
+          width={width}
+          height={height}
+        />
       </div>
     </>
   );

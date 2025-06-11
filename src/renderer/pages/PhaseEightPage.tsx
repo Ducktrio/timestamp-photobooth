@@ -48,6 +48,7 @@ export default function PhaseEightPage() {
 
   const handleNext = async () => {
     data.saveCanvas(canvasor.current?.serialize()!);
+    phase.next();
   };
 
   return (

@@ -39,6 +39,13 @@ declare global {
         saveCanvas(url: string): void;
 
         /**
+         * Invoke upload call
+         * @param {number} imageCount - number of preserved space for download (canvas + pictures)
+         * @param {string[]} captures - list of absolute path of captured pictures
+         */
+        upload(imageCount: number, captures: string[]): Promise<string>;
+
+        /**
          * Invoke print procedure
          * @param {string} url - url representation of the canvas
          * @param {number} quantity - number of prints
@@ -54,6 +61,7 @@ declare global {
       };
       file: {
         getCaptures(): Promise<string[]>;
+        getVideo(): Promise<string>;
       };
     };
   }

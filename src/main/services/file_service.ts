@@ -118,6 +118,20 @@ export class FileService {
       throw error;
     }
   }
+
+  /**
+   * Return an absolute path to the video export
+   */
+  public getVideo() {
+    return path.join(this.exportDir(), 'video.mp4');
+  }
+
+  /**
+   * Return an absolute path to the exported canvas
+   */
+  public getCanvasExport(): string {
+    return path.join(this.exportDir(), 'canvas.jpg');
+  }
 }
 
 export const File = new FileService();

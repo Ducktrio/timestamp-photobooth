@@ -12,6 +12,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   file: {
     getCaptures: async () => ipcRenderer.invoke('file/getCaptures'),
+    async getVideo() {
+      return await ipcRenderer.invoke('file/getVideo');
+    },
   },
   media: {
     saveMotion(url: string) {
@@ -25,6 +28,9 @@ contextBridge.exposeInMainWorld('electron', {
     },
     print(url: string, quantity: number, split: boolean) {
       ipcRenderer.invoke('media/print', url, quantity, split);
+    },
+    async upload(imageCount: number, captures: string[]) {
+      return await ipcRenderer.invoke('media/upload', imageCount, captures);
     },
   },
   session: {
@@ -46,7 +52,7 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
   config: {
-    BOOTH_TOKEN: '67b7827f8509098ee9618cb4',
+    BOOTH_TOKEN: process.env.BOOTH_TOKEN,
     SNAP_SCRIPT:
       process.env.NODE_ENV === 'development'
         ? 'https://app.sandbox.midtrans.com/snap/snap.js'

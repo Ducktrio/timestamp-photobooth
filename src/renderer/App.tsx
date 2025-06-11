@@ -17,6 +17,7 @@ import PhaseSixPage from './pages/PhaseSixPage';
 import PhaseSevenPage from './pages/PhaseSevenPage';
 import PhaseEightPage from './pages/PhaseEightPage';
 import PhaseNinePage from './pages/PhaseNinePage';
+import PhaseTenPage from './pages/PhaseTenPage';
 AOS.init({
   duration: 1500,
   mirror: true,
@@ -42,6 +43,7 @@ export default function App() {
                 <Route path="/phase7" element={<PhaseSevenPage />}></Route>
                 <Route path="/phase8" element={<PhaseEightPage />}></Route>
                 <Route path="/phase9" element={<PhaseNinePage />}></Route>
+                <Route path="/phase10" element={<PhaseTenPage />}></Route>
               </Routes>
             </AppInitiators>
           </PhaseProvider>

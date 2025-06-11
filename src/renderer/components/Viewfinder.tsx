@@ -20,7 +20,7 @@ const Viewfinder = ({
   const data = sessionData();
 
   useEffect(() => {
-    console.log('[CameraPreview] Pause: ', pause);
+    console.log('VIEWFINDER CALL');
 
     if (pause && wsRef.current) {
       motion.stop();
@@ -71,7 +71,7 @@ const Viewfinder = ({
       if (chunk === undefined || chunk === null) return;
       imageBuffer.push(chunk);
 
-      if (imageBuffer.length > 10) imageBuffer.shift();
+      if (imageBuffer.length > 32) imageBuffer.shift();
 
       if (!imageBuffer.length) return;
       const latestChunk = imageBuffer[imageBuffer.length - 1];
@@ -92,7 +92,7 @@ const Viewfinder = ({
 
         // draw borderline
         canvas?.beginPath();
-        canvas?.setLineDash([1, 1]);
+        canvas?.setLineDash([2, 2]);
         canvas!.strokeStyle = 'white';
         canvas!.lineWidth = 0.25;
 
@@ -110,7 +110,7 @@ const Viewfinder = ({
 
   return (
     <>
-      <div className="fixed z-[0] top-0 left-0">
+      <div className="fixed z-[0] top-0 left-0 flex items-center justify-center h-screen w-screen">
         <canvas ref={canvasRef} width={width} height={height} />
       </div>
     </>

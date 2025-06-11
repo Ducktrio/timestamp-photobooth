@@ -50,7 +50,7 @@ class MediaService {
     }
 
     const worker = new Worker(
-      path.join(__dirname, '../workers/printWorker.js'),
+      path.join(__dirname, '../workers/printerWorker.js'),
       {
         workerData: {
           filePath: files,
@@ -69,7 +69,7 @@ class MediaService {
     try {
       const filepath = path.join(
         File.motionDir(),
-        `motion_${store.getState().motion.index}.jpg`
+        `${store.getState().motion.index}.jpg`
       );
       writeFile(filepath, data);
       store.dispatch(increment());
@@ -82,16 +82,16 @@ class MediaService {
    * Start video rendering procedure
    */
   public async renderVideo() {
+    console.log('attempting to render video');
     const path = File.motionDir();
 
     const targetPath = File.exportDir();
 
-    const COMMAND = `ffmpeg -framerate 10 -i ${path}%02d.jpg -vf "fps-10" -pix_fmt yuv420p ./video.mp4`;
+    const COMMAND = `ffmpeg -framerate 10 -i ${path}/%d.jpg -vf "fps=10" -pix_fmt yuv420p ./video.mp4`;
 
     const process = spawn('bash', ['-c', COMMAND], {
       cwd: targetPath,
     });
-
     process.stdout.on('error', (err) => {
       console.error(err);
       throw err;

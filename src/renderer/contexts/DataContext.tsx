@@ -37,6 +37,9 @@ interface DataContextValue {
   pictures: string[];
   setPictures: (sources: string[]) => void;
 
+  page: string | null;
+  setPage: (url: string) => void;
+
   originalWidth: MutableRefObject<number>;
   originalHeight: MutableRefObject<number>;
 
@@ -58,6 +61,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   const [pictures, setPictures] = useState<string[]>([]);
   const [count, setCount] = useState<number>(-1);
   const [split, setSplit] = useState<boolean>(false);
+  const [page, setPage] = useState<string | null>(null);
 
   const originalWidth = useRef<number>(1000);
   const originalHeight = useRef<number>(1000);
@@ -72,6 +76,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
     setPictures([]);
     setCount(-1);
     setSplit(false);
+    setPage(null);
     originalHeight.current = 1000;
     originalWidth.current = 1000;
     aspectRatio.current = 1;
@@ -96,6 +101,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
         setCount,
         split,
         setSplit,
+        page,
+        setPage,
         originalHeight,
         originalWidth,
         aspectRatio,

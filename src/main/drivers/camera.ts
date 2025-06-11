@@ -177,10 +177,8 @@ export class CameraDriver {
     if (!this.STREAM_LOCK) this.STREAM_LOCK = await this.RESOURCE.acquire();
 
     this.STREAM_PROCESS = spawn('bash', ['-c', this.COMMANDS.stream], {
-      stdio: ['ignore', 'pipe', 'ignore'],
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
-
-    this.STREAM_PROCESS.stdout?.removeAllListeners('data');
 
     if (this.STREAM_PROCESS.stdout?.listenerCount('data') === 0)
       this.STREAM_PROCESS.stdout.on('data', sendFrame);
@@ -194,14 +192,18 @@ export class CameraDriver {
   static async stop_stream() {
     if (this.STREAM_PROCESS) {
       try {
-        this.STREAM_PROCESS.stdout?.removeAllListeners('data');
-        this.STREAM_PROCESS.kill('SIGINT');
-        this.STREAM_PROCESS = null;
+        this.STREAM_PROCESS.stdout?.removeAllListeners();
+        this.STREAM_PROCESS.stdout?.destroy();
+        this.STREAM_PROCESS.kill('SIGTERM'); // Signal to "terminate"
+        await once(this.STREAM_PROCESS, 'exit');
+        this.STREAM_PROCESS.unref();
 
         // This is an important thing to let the camera procecss stream deactivation
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+
         this.STREAM_LOCK?.release();
         this.STREAM_LOCK = null;
+        this.STREAM_PROCESS = null;
       } catch (error) {
         throw error;
       }

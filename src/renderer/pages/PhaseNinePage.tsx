@@ -68,7 +68,18 @@ export default function PhaseNinePage() {
           image.naturalHeight
         );
 
-        window.electron.media.print(print!, data.quantity!, data.frame?.split!);
+        window.electron.media.print(
+          data.split ? print! : exports!,
+          data.quantity!,
+          data.frame?.split!
+        );
+
+        const url = await window.electron.media.upload(
+          data.pictures.length + 1,
+          data.pictures!
+        ); // Pictures and the canvas
+
+        data.setPage(url);
 
         setState(State.PROCEED);
       };
@@ -94,13 +105,13 @@ export default function PhaseNinePage() {
     );
 
   return (
-    <Page>
-      <div className="flex flex-col justify-evenly items-center rounded bg-surface outline shadow-xl p-8">
+    <Page className="flex flex-row justify-evenly items-center">
+      <div className="flex-1 flex flex-col justify-evenly items-center rounded bg-surface outline shadow-xl p-12 gap-12 min-h-[80vh]">
         <div>
-          <h1 className="font-bold text-4xl">Are you sure with your picks?</h1>
+          <h1 className="font-bold text-8xl">Are you sure with your picks?</h1>
         </div>
 
-        <div className="flex flex-row justify-evenly">
+        <div className="flex flex-row gap-12 justify-between">
           <Button variant="outline" onClick={() => handleCancel()}>
             Not yet, go back
           </Button>
@@ -110,7 +121,7 @@ export default function PhaseNinePage() {
         </div>
       </div>
       <div
-        className="flex-1 flex items-center justify-center"
+        className="flex-1 flex items-center justify-center max-h-[80vh]"
         ref={containerRef}
       >
         <canvas ref={canvasRef} />

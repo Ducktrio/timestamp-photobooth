@@ -1,4 +1,6 @@
 import { ipcMain } from 'electron';
+import { File } from '../services/file_service';
+import UploadService from '../services/upload_service';
 import { Media } from '../services/media_service';
 
 export const registerMediaHandler = () => {
@@ -33,6 +35,20 @@ export const registerMediaHandler = () => {
       try {
         await Media.savePrint(url);
         Media.print(quantity, split);
+      } catch (error) {
+        throw error;
+      }
+    }
+  );
+
+  ipcMain.handle(
+    'media/upload',
+    async (event, imageCount: number, captures: string[]) => {
+      try {
+        const uploader = new UploadService(imageCount);
+        const srcs = [File.getCanvasExport(), ...captures];
+        await uploader.startUpload(srcs, File.getVideo());
+        return uploader.getUrl();
       } catch (error) {
         throw error;
       }

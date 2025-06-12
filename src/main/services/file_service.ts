@@ -1,5 +1,4 @@
 import { app } from 'electron';
-import logger from '../utilities/logger';
 import path from 'path';
 import {
   deleteFile,

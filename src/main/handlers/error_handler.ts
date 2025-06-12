@@ -28,7 +28,7 @@ async function handleCriticalError(type: string, error: Error) {
 
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow
-      .loadFile(path.join(__dirname, '../renderer/fallback.html'))
+      .loadFile(path.join(__dirname, 'assets', 'fallback.html'))
       .catch((err) => {
         console.error('❌ Failed to load fallback page:', err);
       });

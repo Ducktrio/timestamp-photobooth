@@ -7,7 +7,6 @@ on:
 
 jobs:
   build-and-release:
-    if: github.event.before == 'refs/heads/dev' || github.event.head_commit.message == 'Merge branch \'dev\''
     runs-on: ubuntu-latest
 
     env:

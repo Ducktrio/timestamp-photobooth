@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-name: Build and Test
+name: Build and Release
 on:
   push:
     branches: [release]
@@ -19,13 +19,15 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run package
-
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: softprops/action-gh-release@v4
+      - name: Create Release
+        id: create_release
+        uses: comnoco/create-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          name: Release ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          files: |
-            release/
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            First attempt on building release
+          draft: false
+          prerelease: false

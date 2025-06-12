@@ -5,6 +5,7 @@ import Page from 'renderer/components/Page';
 import Selector from 'renderer/components/Selector';
 import { sessionData } from 'renderer/contexts/DataContext';
 import { usePhase } from 'renderer/contexts/PhaseContext';
+import useIdle from 'renderer/hooks/useIdle';
 
 /**
  * Phase two of the session.
@@ -13,6 +14,7 @@ import { usePhase } from 'renderer/contexts/PhaseContext';
  */
 export default function PhaseTwoPage() {
   const data = sessionData();
+  const idle = useIdle(10000, true);
 
   const [selected, setSelected] = useState(-1);
 

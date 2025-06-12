@@ -36,7 +36,8 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
   session: {
-    begin: async () => ipcRenderer.invoke('session/begin'),
+    begin: async () => await ipcRenderer.invoke('session/begin'),
+    end: async () => await ipcRenderer.invoke('session/end'),
   },
   ipcRenderer: {
     sendMessage(channel: Channels, args: unknown[]) {

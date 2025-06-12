@@ -3,6 +3,9 @@ import Button from 'renderer/components/Button';
 import LoadingAnimation from 'renderer/components/LoadingAnimation';
 import Page from 'renderer/components/Page';
 import { sessionData } from 'renderer/contexts/DataContext';
+import { usePhase } from 'renderer/contexts/PhaseContext';
+import useIdle from 'renderer/hooks/useIdle';
+import BoothManager from 'renderer/services/BoothManager';
 const QRCode = require('../utilities/qrcode') as QRCodeConstructor;
 
 interface QRCodeConstructor {
@@ -19,6 +22,7 @@ export default function PhaseTenPage() {
   const [video, setVideo] = useState<string | null>(null);
   const qrRef = useRef<HTMLDivElement | null>(null);
   const data = sessionData();
+  const phase = usePhase();
 
   useEffect(() => {
     window.electron.logger.info('A session has reached its end');
@@ -39,6 +43,12 @@ export default function PhaseTenPage() {
         correctLevel: QRCode.CorrectLevel.H,
       });
   }, [qrRef.current]);
+
+  const handleEnd = async () => {
+    await BoothManager.end();
+  };
+
+  const idle = useIdle(10800, true, handleEnd);
 
   return (
     <Page fullscreen={true} className="flex w-full h-screen">
@@ -64,7 +74,7 @@ export default function PhaseTenPage() {
         </div>
 
         <div className="flex">
-          <Button>Done</Button>
+          <Button onClick={() => handleEnd()}>Done</Button>
         </div>
       </div>
     </Page>

@@ -56,4 +56,12 @@ export default class BoothManager {
         throw error;
       });
   }
+
+  public static async end() {
+    try {
+      await window.electron.session.end();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

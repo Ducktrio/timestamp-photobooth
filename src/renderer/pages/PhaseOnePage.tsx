@@ -7,6 +7,7 @@ import Selector from 'renderer/components/Selector';
 import { sessionData } from 'renderer/contexts/DataContext';
 import { usePhase } from 'renderer/contexts/PhaseContext';
 import { useFramePreview } from 'renderer/hooks/useFramePreview';
+import useIdle from 'renderer/hooks/useIdle';
 import Frame from 'renderer/interfaces/Frame';
 
 interface Options {
@@ -18,6 +19,7 @@ export default function PhaseOnePage() {
   const [selected, setSelected] = useState<number>(-1);
   const phase = usePhase();
   const data = sessionData();
+  const idle = useIdle(10000, true);
   const [options] = useState<Options[]>([
     {
       label: 'Wide',

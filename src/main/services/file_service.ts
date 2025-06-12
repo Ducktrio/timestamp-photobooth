@@ -1,5 +1,4 @@
 import { app } from 'electron';
-import logger from '../utilities/logger';
 import path from 'path';
 import {
   deleteFile,
@@ -100,7 +99,7 @@ export class FileService {
       const exports = await listFolderContents(this.FOLDERPATH.exports);
 
       if (!captures.length && !motions.length && !exports.length) {
-        logger.warn('workspace folder already empty when attempting to clean');
+        console.warn('workspace folder already empty when attempting to clean');
         return;
       }
 

@@ -11,6 +11,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -64,6 +65,17 @@ const configuration: webpack.Configuration = {
       NODE_ENV: 'production',
       DEBUG_PROD: false,
       START_MINIMIZED: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'fallback.html',
+      template: path.join(webpackPaths.srcMainPath, 'fallback.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      isDevelopment: process.env.NODE_ENV !== 'production',
     }),
   ],
 

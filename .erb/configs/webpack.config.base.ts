@@ -37,6 +37,10 @@ const configuration: webpack.Configuration = {
         test: /\.node$/,
         use: 'native-addon-loader',
       },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
     ],
   },
 

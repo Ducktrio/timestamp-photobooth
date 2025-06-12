@@ -20,15 +20,13 @@ export function AppInitiators({ children }: AppInitiatorProps) {
   useEffect(() => {
     if (state === State.LOADING) {
       (async () => {
-        await BoothManager.boot();
-      })()
-        .then(() => {
+        try {
+          await BoothManager.boot();
           setState(State.RUNNING);
-        })
-        .catch((error) => {
-          setState(State.ERROR);
-          setError(error);
-        });
+        } catch (error) {
+          throw error;
+        }
+      })();
     }
   }, [state]);
 

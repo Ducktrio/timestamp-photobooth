@@ -1,0 +1,33 @@
+.error-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  font-family: sans-serif;
+  background-color: #fdfdfd;
+  color: #333;
+}
+
+.error-icon {
+  font-size: 6rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-fallback h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.error-fallback p {
+  font-size: 1rem;
+  max-width: 400px;
+  color: #666;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}

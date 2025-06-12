@@ -19,3 +19,7 @@ html {
 :root {
   font-size: 18px;
 }
+
+body > iframe {
+  display: none;
+}

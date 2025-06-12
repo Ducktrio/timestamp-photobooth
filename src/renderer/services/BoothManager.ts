@@ -35,19 +35,16 @@ export default class BoothManager {
    * apply/reapply theme styling, fetch from server
    */
   public static async boot(): Promise<void> {
-    await new Promise((resolve, reject) => {
-      this.API.get<BoothInitResponse>('/booths/init')
-        .then((data) => {
-          this.booth = data.booth;
-          this.theme = data.theme;
+    this.API.get<BoothInitResponse>('/booths/init')
+      .then((data) => {
+        this.booth = data.booth;
+        this.theme = data.theme;
 
-          this.updateTheme(JSON.parse(data.theme.config));
-          resolve(null);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
+        this.updateTheme(JSON.parse(data.theme.config));
+      })
+      .catch((error: AxiosError) => {
+        throw error;
+      });
     // await window.electron.session.begin();
   }
 }

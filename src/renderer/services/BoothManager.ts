@@ -2,7 +2,6 @@ import { AxiosError } from 'axios';
 import Booth from 'renderer/interfaces/Booth';
 import Frame from 'renderer/interfaces/Frame';
 import { FilterPreset } from 'renderer/interfaces/ImageFilter';
-import ISessionState from 'renderer/interfaces/SessionState';
 import Theme from 'renderer/interfaces/Theme';
 import API from 'renderer/modules/API';
 import { applyColors } from 'renderer/utilities/ColorGenerator';

@@ -54,10 +54,21 @@ contextBridge.exposeInMainWorld('electron', {
   config: {
     BOOTH_TOKEN: process.env.BOOTH_TOKEN,
     SNAP_SCRIPT:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development'
         ? 'https://app.sandbox.midtrans.com/snap/snap.js'
         : null,
     ENV: process.env.NODE_ENV,
+  },
+  logger: {
+    error(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/error', { message, meta });
+    },
+    warn(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/warn', { message, meta });
+    },
+    info(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/info', { message, meta });
+    },
   },
   onStream: (callback: (chunk: Uint8Array) => void) =>
     ipcRenderer.on('stream', (_, frame) => callback(frame)),

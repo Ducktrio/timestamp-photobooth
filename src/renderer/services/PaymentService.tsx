@@ -24,7 +24,6 @@ export default class PaymentService {
         quantity: quantity,
       })
       .then((response) => {
-        console.log(response.data);
         return response.data.token;
       })
       .catch((error) => {

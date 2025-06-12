@@ -1,7 +1,8 @@
 import { logLevels } from '../shared/logLevels';
 import winston, { createLogger, format, Logger, transports } from 'winston';
-import { app } from 'electron';
 import path from 'path';
+import { HttpPostTransport } from './HttpPostTransport';
+import { app } from 'electron';
 
 const formatter = format.printf(({ level, message, label, timestamp }) => {
   return `${timestamp} ${label} [${level}]: ${message}`;
@@ -10,10 +11,12 @@ const formatter = format.printf(({ level, message, label, timestamp }) => {
 const logFilePath = path.join(app.getPath('logs'), 'app.log');
 
 class LoggerFactory {
-  private environment: 'dev' | 'uat' | 'production';
+  private environment: 'development' | 'uat' | 'production';
   private logger: Logger = createLogger();
 
-  constructor(environment: 'dev' | 'uat' | 'production' = 'dev') {
+  constructor(
+    environment: 'development' | 'uat' | 'production' = 'development'
+  ) {
     this.environment = environment;
 
     this.logger = createLogger({
@@ -28,7 +31,13 @@ class LoggerFactory {
         new transports.Console({
           format: format.colorize({ all: true }),
         }),
-        this.environment != 'dev'
+        new HttpPostTransport({
+          endpoint: 'https://timestamp.fun/api/boothLogs',
+          headers: {
+            Token: process.env.BOOTH_TOKEN,
+          },
+        }),
+        this.environment != 'development'
           ? new transports.File({ filename: logFilePath })
           : new transports.File({ filename: 'debug.log', level: 'debug' }),
       ],
@@ -39,26 +48,29 @@ class LoggerFactory {
     return this.logger;
   }
 
-  public error(message: string, ...args: string[]) {
+  public error(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'error',
-      message: `${message} ${args}`,
+      message: `${message}`,
+      meta: meta,
     };
     this.logger.log(entry);
   }
 
-  public warn(message: string, ...args: string[]) {
+  public warn(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'warn',
-      message: `${message} ${args}`,
+      message: `${message}`,
+      meta: meta,
     };
     this.logger.log(entry);
   }
 
-  public info(message: string, ...args: string[]) {
+  public info(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'info',
-      message: `${message} ${args}`,
+      message: `${message}`,
+      meta: meta,
     };
     this.logger.log(entry);
   }
@@ -80,7 +92,7 @@ class LoggerFactory {
   }
 }
 const logger = new LoggerFactory(
-  process.env.NODE_ENV as 'dev' | 'uat' | 'production'
+  process.env.NODE_ENV as 'development' | 'uat' | 'production'
 );
 
 export default logger;

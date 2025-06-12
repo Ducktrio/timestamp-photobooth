@@ -1,33 +1,32 @@
-# .github/workflows/build.yml
-name: Build and Release
+name: Build and Release Electron App
+
 on:
   push:
-    branches: [release]
-  pull_request:
-    branches: [release]
+    branches:
+      - release
 
 jobs:
-  build:
+  build-and-release:
+    if: github.event.before == 'refs/heads/dev' || github.event.head_commit.message == 'Merge branch \'dev\''
     runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      - run: npm run package
-      - name: Create Release
-        id: create_release
-        uses: comnoco/create-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            First attempt on building release
-          draft: false
-          prerelease: false
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the app
+        run: npm run build
+
+      - name: Package with electron-builder
+        run: npx electron-builder --linux AppImage --publish always

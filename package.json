@@ -262,9 +262,7 @@
       "./assets/**"
     ],
     "publish": {
-      "provider": "github",
-      "owner": "Wakugumi",
-      "repo": "timestamp-photobooth"
+      "provider": "github"
     }
   },
   "collective": {

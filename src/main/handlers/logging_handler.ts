@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron/main';
+import { ipcMain } from 'electron';
 import logger from '../utilities/logger';
 
 export const registerLoggingHandlers = () => {

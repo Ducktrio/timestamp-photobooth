@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "name": "timestamp_photobooth",
+  "version": "1.0.0",
+  "description": "Photobooth app",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Ananda Risyad",
+    "email": "anandarisyad@proton.me",
+    "url": "https://github.com/wakugumi"
   },
   "main": "./dist/main/main.js",
   "scripts": {

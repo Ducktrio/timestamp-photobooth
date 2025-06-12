@@ -66,6 +66,10 @@ declare global {
          * Begin new session
          */
         begin(): Promise<void>;
+        /**
+         * End session, clear folders
+         */
+        end(): Promise<void>;
       };
       file: {
         getCaptures(): Promise<string[]>;

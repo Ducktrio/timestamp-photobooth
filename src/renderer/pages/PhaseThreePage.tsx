@@ -3,7 +3,7 @@ import LoadingAnimation from 'renderer/components/LoadingAnimation';
 import Page from 'renderer/components/Page';
 import { sessionData } from 'renderer/contexts/DataContext';
 import { usePhase } from 'renderer/contexts/PhaseContext';
-import { ErrorHandler } from 'renderer/helpers/ErrorHandler';
+import useIdle from 'renderer/hooks/useIdle';
 import useScript from 'renderer/hooks/useScript';
 import PaymentCallback from 'renderer/interfaces/PaymentCallback';
 import PaymentErrorCallback from 'renderer/interfaces/PaymentErrorCallback';
@@ -17,9 +17,13 @@ enum State {
   ERROR,
 }
 
+/**
+ * Payment phase
+ */
 export default function PhaseThreePage() {
   const data = sessionData();
   const phase = usePhase();
+  const idle = useIdle(18000, true);
   const [state, setState] = useState<State>(State.LOADING);
   const [error, setError] = useState<Error | null>(null);
   const [token, setToken] = useState('');
@@ -84,7 +88,7 @@ export default function PhaseThreePage() {
       </Page>
     );
 
-  if (state === State.ERROR) return <ErrorHandler error={error!} />;
+  if (state === State.ERROR) throw error;
 
   if (state === State.ABORT) phase.restart();
 

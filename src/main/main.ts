@@ -61,6 +61,7 @@ registerSessionHandlers();
 registerFileHandlers();
 
 import { registerLoggingHandlers } from './handlers/logging_handler';
+import { setupGlobalErrorHandler } from './handlers/error_handler';
 registerLoggingHandlers();
 
 ipcMain.on('ipc-example', async (event, arg) => {
@@ -127,7 +128,12 @@ const createWindow = async () => {
   mainWindow.setFullScreen(true);
   // Run viewfinder instance immediately
   // Opens web socket
-  ViewfinderService(mainWindow!);
+  try {
+    ViewfinderService(mainWindow!);
+  } catch (error) {
+    console.error(error);
+    mainWindow.webContents.send('throw', error);
+  }
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -146,6 +152,10 @@ const createWindow = async () => {
   });
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  process.on('uncaughtException', (error) => {
+    mainWindow?.webContents.send('throw', error);
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -186,6 +196,8 @@ app
     }
 
     createWindow();
+
+    setupGlobalErrorHandler(mainWindow!);
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

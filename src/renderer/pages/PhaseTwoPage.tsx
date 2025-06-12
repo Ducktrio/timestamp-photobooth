@@ -30,7 +30,7 @@ export default function PhaseTwoPage() {
   }, [selected]);
 
   const handleNext = () => {
-    phase.next();
+    phase.jumpTo(4);
   };
 
   return (

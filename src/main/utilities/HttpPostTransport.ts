@@ -45,15 +45,18 @@ export class HttpPostTransport extends TransportStream {
   }
 
   log(info: any, callback: () => void): void {
+    console.log('Retrieve a log emit', info);
     setImmediate(() => this.emit('logged', info));
+    info.level = info.level.replace(
+      /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+      ''
+    );
 
     if (info.level === 'trace' || info.level === 'debug') return;
 
     const logPayload: LogPayload = {
-      level: levelMap[info.level],
-      message: `${info.message} - ${
-        info.meta ? JSON.stringify(info.meta) : ''
-      }`,
+      level: levelMap[info.level.toString()],
+      message: `${info.message}`,
       timestamp: nowInUnix(),
     };
 

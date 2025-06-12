@@ -28,6 +28,10 @@ export default function PhaseThreePage() {
   });
 
   useEffect(() => {
+    if (!data.frame || !data.quantity)
+      throw new Error(
+        'Unable to make payment, somehow data for payment is missing'
+      );
     console.log(
       window.electron.config.SNAP_SCRIPT,
       BoothManager.Booth.clientKey
@@ -35,12 +39,11 @@ export default function PhaseThreePage() {
     if (token) return;
     (async () => {
       const token = await PaymentService.pay(data.frame!.id, data.quantity);
+      setToken(token!);
 
       window.electron.logger.info('New transaction opened', { token: token });
 
       setState(State.RUNNING);
-
-      setToken(token!);
     })().catch((error) => {
       throw error;
     });
@@ -51,8 +54,6 @@ export default function PhaseThreePage() {
   };
 
   useEffect(() => {
-    if (!token) return;
-
     if (state === State.RUNNING && token)
       window.snap.pay(token, {
         onSuccess: function (result: PaymentCallback) {
@@ -74,7 +75,7 @@ export default function PhaseThreePage() {
           phase.restart();
         },
       });
-  }, [token, state]);
+  }, [state]);
 
   if (state === State.LOADING)
     return (

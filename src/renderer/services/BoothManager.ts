@@ -35,7 +35,7 @@ export default class BoothManager {
    * apply/reapply theme styling, fetch from server
    */
   public static async boot(): Promise<void> {
-    this.API.get<BoothInitResponse>('/booths/init')
+    await this.API.get<BoothInitResponse>('/booths/init')
       .then((data) => {
         this.booth = data.booth;
         this.theme = data.theme;
@@ -45,6 +45,15 @@ export default class BoothManager {
       .catch((error: AxiosError) => {
         throw error;
       });
-    // await window.electron.session.begin();
+    await window.electron.session.begin();
+    await window.electron.camera
+      .status()
+      .then((status) => {
+        if (!status) throw new Error('Camera is not present');
+        return;
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 }

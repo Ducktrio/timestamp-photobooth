@@ -1,8 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { usePhase } from 'renderer/contexts/PhaseContext';
 import BoothManager from 'renderer/services/BoothManager';
-import { ErrorHandler } from './ErrorHandler';
-
 interface AppInitiatorProps {
   children: ReactNode;
 }
@@ -18,16 +16,23 @@ export function AppInitiators({ children }: AppInitiatorProps) {
   const phase = usePhase();
 
   useEffect(() => {
+    window.electron.ipcRenderer.once('throw', (arg) => {
+      throw arg as Error;
+    });
+
     if (state === State.LOADING) {
       (async () => {
         try {
           await BoothManager.boot();
           setState(State.RUNNING);
         } catch (error) {
+          setState(State.ERROR);
+          setError(error as Error);
           throw error;
         }
       })();
     }
+    console.log('App initiate', state);
   }, [state]);
 
   if (state === State.RUNNING)
@@ -43,8 +48,7 @@ export function AppInitiators({ children }: AppInitiatorProps) {
       </div>
     );
 
-  if (state === State.ERROR)
-    return <ErrorHandler error={error!}></ErrorHandler>;
+  if (state === State.ERROR) throw error;
 
   if (state === State.LOADING) return <>Loading...</>;
 

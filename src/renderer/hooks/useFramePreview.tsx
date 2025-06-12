@@ -6,6 +6,7 @@ export const useFramePreview = (split: boolean) => {
   const [frames, setFrames] = useState<Frame[]>([]);
   const [wide, setWide] = useState<Frame[]>([]);
   const [strip, setStrip] = useState<Frame[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (split && strip.length > 0) return;
@@ -16,7 +17,10 @@ export const useFramePreview = (split: boolean) => {
           split ? setStrip(value as Frame[]) : setWide(value as Frame[]);
         })
         .catch((error) => {
-          throw error;
+          const err = new Error(
+            `Cannot get frames for preview. Error object: ${error}`
+          );
+          setError(err);
         });
     })();
   }, [split]);
@@ -25,5 +29,6 @@ export const useFramePreview = (split: boolean) => {
     setFrames(split ? strip : wide);
   }, [split, wide, strip]);
 
+  if (error) throw error;
   return frames;
 };

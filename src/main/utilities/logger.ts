@@ -37,6 +37,7 @@ class LoggerFactory {
             Token: process.env.BOOTH_TOKEN,
           },
         }),
+
         this.environment != 'development'
           ? new transports.File({ filename: logFilePath })
           : new transports.File({ filename: 'debug.log', level: 'debug' }),

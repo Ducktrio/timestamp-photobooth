@@ -7,7 +7,6 @@ export const registerSessionHandlers = () => {
     try {
       CameraDriver.reset_index();
       await File.scanFolders();
-      await File.cleanWorkspace();
     } catch (error) {
       throw error;
     }

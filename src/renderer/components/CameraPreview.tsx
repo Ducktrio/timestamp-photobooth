@@ -44,6 +44,10 @@ const CameraPreview = ({
       throw new Error('Error on connecting to websocket server');
     };
 
+    wsRef.current.onmessage = (ev) => {
+      if (ev.data instanceof Error) throw ev.data as Error;
+    };
+
     wsRef.current.binaryType = 'blob';
 
     let imageBuffer: Uint8Array[] = [];

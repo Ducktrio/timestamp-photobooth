@@ -36,7 +36,7 @@ export default function PhaseThreePage() {
     (async () => {
       const token = await PaymentService.pay(data.frame!.id, data.quantity);
 
-      window.electron.logger.info('New transaction opened', token as string);
+      window.electron.logger.info('New transaction opened', { token: token });
 
       setState(State.RUNNING);
 
@@ -52,30 +52,26 @@ export default function PhaseThreePage() {
 
   useEffect(() => {
     if (!token) return;
-    console.log(window.snap);
 
     if (state === State.RUNNING && token)
       window.snap.pay(token, {
         onSuccess: function (result: PaymentCallback) {
           data.setPayment(result);
-          window.electron.logger.info(
-            'A transaction has been settled',
-            JSON.stringify(result)
-          );
+          window.electron.logger.info('A transaction has been settled', result);
           handleNext();
         },
         onPending: function () {},
-        onClose: function () {
-          window.electron.logger.info('A payment request is closed by user');
-          setState(State.ABORT);
-        },
         onError: function (result: PaymentErrorCallback) {
           window.electron.logger.warn(
             'Error occured on an attempt of payment',
-            JSON.stringify(result)
+            result
           );
           setState(State.ERROR);
           setError(new Error(result.status_message[0]));
+        },
+        onClose: function () {
+          window.electron.logger.info('A payment request is closed by user');
+          phase.restart();
         },
       });
   }, [token, state]);
@@ -88,6 +84,8 @@ export default function PhaseThreePage() {
     );
 
   if (state === State.ERROR) return <ErrorHandler error={error!} />;
+
+  if (state === State.ABORT) phase.restart();
 
   return (
     <>

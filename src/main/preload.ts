@@ -1,27 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import logger from './utilities/logger';
 
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
-  logger: {
-    error(message: string, ...args: string[]) {
-      logger.error(message, ...args);
-    },
-    warn(message: string, ...args: string[]) {
-      logger.warn(message, ...args);
-    },
-    info(message: string, ...args: string[]) {
-      logger.info(message, ...args);
-    },
-    trace(message: string, ...args: string[]) {
-      logger.trace(message, ...args);
-    },
-
-    debug(message: string, ...args: string[]) {
-      logger.debug(message, ...args);
-    },
-  },
   camera: {
     status: async () => ipcRenderer.invoke('camera/status'),
     async capture() {
@@ -77,6 +58,17 @@ contextBridge.exposeInMainWorld('electron', {
         ? 'https://app.sandbox.midtrans.com/snap/snap.js'
         : null,
     ENV: process.env.NODE_ENV,
+  },
+  logger: {
+    error(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/error', { message, meta });
+    },
+    warn(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/warn', { message, meta });
+    },
+    info(message: string, meta?: Record<string, any>) {
+      ipcRenderer.send('log/info', { message, meta });
+    },
   },
   onStream: (callback: (chunk: Uint8Array) => void) =>
     ipcRenderer.on('stream', (_, frame) => callback(frame)),

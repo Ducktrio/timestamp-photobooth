@@ -14,16 +14,6 @@ const CameraPreview = ({
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    console.log('[CameraPreview] Mounts');
-
-    return () => {
-      console.log('[CameraPreview] Unmounts');
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log('[CameraPreview] Pause: ', pause);
-
     if (pause && wsRef.current) {
       wsRef.current?.close();
       const ctx = canvasRef.current?.getContext('2d');
@@ -51,11 +41,9 @@ const CameraPreview = ({
     wsRef.current = new WebSocket('ws://localhost:8080');
 
     wsRef.current.onerror = (ev: Event) => {
-      console.error(ev);
-      return;
+      throw new Error('Error on connecting to websocket server');
     };
 
-    console.log('[CameraPreview] Websocket opens');
     wsRef.current.binaryType = 'blob';
 
     let imageBuffer: Uint8Array[] = [];

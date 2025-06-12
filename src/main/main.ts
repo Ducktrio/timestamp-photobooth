@@ -14,11 +14,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { ViewfinderService } from './services/viewfinder_service';
-import { registerCameraHandler } from './handlers/camera_handler';
-import { registerMediaHandler } from './handlers/media_handler';
-import { registerSessionHandlers } from './handlers/session_handler';
-import { registerFileHandlers } from './handlers/file_handler';
 import * as dotenv from 'dotenv';
 import * as os from 'os';
 import { existsSync } from 'fs';
@@ -49,11 +44,25 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
+
 let mainWindow: BrowserWindow | null = null;
+
+loadEnv();
+
+import { ViewfinderService } from './services/viewfinder_service';
+import { registerCameraHandler } from './handlers/camera_handler';
+import { registerMediaHandler } from './handlers/media_handler';
+import { registerSessionHandlers } from './handlers/session_handler';
+import { registerFileHandlers } from './handlers/file_handler';
+
 registerCameraHandler();
 registerMediaHandler();
 registerSessionHandlers();
 registerFileHandlers();
+
+import { registerLoggingHandlers } from './handlers/logging_handler';
+registerLoggingHandlers();
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -170,8 +179,6 @@ app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
 app
   .whenReady()
   .then(() => {
-    loadEnv();
-
     if (!process.env.BOOTH_TOKEN) {
       console.error('❌ BOOTH_TOKEN is not set in .env!');
       app.quit();

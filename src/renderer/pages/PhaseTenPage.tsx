@@ -21,6 +21,7 @@ export default function PhaseTenPage() {
   const data = sessionData();
 
   useEffect(() => {
+    window.electron.logger.info('A session has reached its end');
     (async () => {
       const path = await window.electron.file.getVideo();
       setVideo(`file://${path}`);

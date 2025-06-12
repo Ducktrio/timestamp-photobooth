@@ -1,7 +1,6 @@
 import TransportStream from 'winston-transport';
 import axios from 'axios';
 import { nowInUnix } from './datetime';
-import { logLevels } from 'main/shared/logLevels';
 
 interface HttpPostTransportOptions
   extends TransportStream.TransportStreamOptions {

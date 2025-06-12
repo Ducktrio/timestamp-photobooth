@@ -48,7 +48,7 @@ class LoggerFactory {
     return this.logger;
   }
 
-  public error(message: string, meta: Record<string, any>) {
+  public error(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'error',
       message: `${message}`,
@@ -57,7 +57,7 @@ class LoggerFactory {
     this.logger.log(entry);
   }
 
-  public warn(message: string, meta: Record<string, any>) {
+  public warn(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'warn',
       message: `${message}`,
@@ -66,7 +66,7 @@ class LoggerFactory {
     this.logger.log(entry);
   }
 
-  public info(message: string, meta: Record<string, any>) {
+  public info(message: string, meta?: Record<string, any>) {
     const entry: winston.LogEntry = {
       level: 'info',
       message: `${message}`,

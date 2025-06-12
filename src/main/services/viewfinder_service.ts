@@ -10,15 +10,20 @@ export const ViewfinderService = (window: BrowserWindow) => {
     console.log('socket new client');
     let buffer = Buffer.alloc(0);
 
-    CameraDriver.start_stream((chunk) => {
-      buffer = Buffer.concat([buffer, chunk]);
+    try {
+      CameraDriver.start_stream((chunk) => {
+        if (!chunk) throw new Error('chunk from video stream is empty');
+        buffer = Buffer.concat([buffer, chunk]);
 
-      if (buffer.length > 1024)
-        if (buffer.includes(Buffer.from([0xff, 0xd9]))) {
-          window.webContents.send('stream', buffer);
-          buffer = Buffer.alloc(0);
-        }
-    });
+        if (buffer.length > 1024)
+          if (buffer.includes(Buffer.from([0xff, 0xd9]))) {
+            window.webContents.send('stream', buffer);
+            buffer = Buffer.alloc(0);
+          }
+      });
+    } catch (error) {
+      ws.send(error as Error);
+    }
 
     ws.on('close', async () => {
       console.log('a socket client disconnected');

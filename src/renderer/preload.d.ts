@@ -27,7 +27,7 @@ declare global {
       onStream: (callback: (chunk: Uint8Array) => void) => void;
 
       camera: {
-        status(): Promise<void>;
+        status(): Promise<boolean>;
         capture(): Promise<void>;
       };
       media: {

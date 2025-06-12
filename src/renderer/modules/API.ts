@@ -30,10 +30,6 @@ export default class API {
   private initializeInterceptors(): void {
     this.axiosInstance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-        }
         config.headers['Token'] = this.token;
         return config;
       },

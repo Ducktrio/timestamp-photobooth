@@ -168,7 +168,7 @@ export class CameraDriver {
    */
   static async start_stream(sendFrame: (chunk: Buffer) => void) {
     if (!this.STATUS)
-      return new Error(
+      throw new Error(
         'Device status on driver is still undetermined, please call status() to ensure device availability'
       );
 
@@ -178,8 +178,14 @@ export class CameraDriver {
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
-    if (this.STREAM_PROCESS.stdout?.listenerCount('data') === 0)
-      this.STREAM_PROCESS.stdout.on('data', sendFrame);
+    this.STREAM_PROCESS.stderr?.on('error', (chunk) => {
+      throw new Error(`starting stream process error ${chunk}`);
+    });
+    this.STREAM_PROCESS.stdout?.on('error', (err) => {
+      throw new Error(`starting stream process error ${err.message}`);
+    });
+
+    this.STREAM_PROCESS.stdout?.on('data', sendFrame);
 
     return;
   }

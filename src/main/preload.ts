@@ -4,7 +4,9 @@ export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
   camera: {
-    status: async () => ipcRenderer.invoke('camera/status'),
+    status: async () => {
+      return await ipcRenderer.invoke('camera/status');
+    },
     async capture() {
       console.log('[MAIN] invoking capture');
       await ipcRenderer.invoke('camera/capture');

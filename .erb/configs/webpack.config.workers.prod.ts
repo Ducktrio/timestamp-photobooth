@@ -11,7 +11,6 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -31,11 +30,19 @@ const configuration: webpack.Configuration = {
   target: 'electron-main',
 
   entry: {
-    main: path.join(webpackPaths.srcMainPath, 'main.ts'),
-    preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
+    uploadWorker: path.join(
+      webpackPaths.srcMainPath,
+      'workers',
+      'uploadWorker.js'
+    ),
+    printerWorker: path.join(
+      webpackPaths.srcMainPath,
+      'workers',
+      'printerWorker.js'
+    ),
   },
   output: {
-    path: webpackPaths.distMainPath,
+    path: webpackPaths.distWorkersPath,
     filename: '[name].js',
   },
 
@@ -51,10 +58,6 @@ const configuration: webpack.Configuration = {
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
     }),
-    new webpack.DefinePlugin({
-      'process.type': '"browser"',
-    }),
-
     /**
      * Create global constants which can be configured at compile time.
      *
@@ -68,17 +71,6 @@ const configuration: webpack.Configuration = {
       NODE_ENV: 'production',
       DEBUG_PROD: false,
       START_MINIMIZED: false,
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'fallback.html',
-      template: path.join(webpackPaths.srcMainPath, 'fallback.ejs'),
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      isBrowser: false,
-      isDevelopment: process.env.NODE_ENV !== 'production',
     }),
   ],
 

@@ -48,7 +48,7 @@ export default function PhaseTenPage() {
     await BoothManager.end();
   };
 
-  const idle = useIdle(10800, true, handleEnd);
+  const idle = useIdle(300000, true, handleEnd);
 
   return (
     <Page fullscreen={true} className="flex w-full h-screen">

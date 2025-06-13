@@ -41,6 +41,10 @@ export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
+    autoUpdater.autoDownload = true;
+    autoUpdater.on('update-downloaded', () => {
+      autoUpdater.quitAndInstall(false, true);
+    });
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
@@ -121,11 +125,13 @@ const createWindow = async () => {
       webSecurity: false,
       sandbox: false,
       contextIsolation: true,
+      nodeIntegration: true,
     },
   });
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
-  mainWindow.setFullScreen(true);
+  mainWindow.loadURL(resolveHtmlPath('index.html')).catch((error) => {
+    console.error(error);
+  });
   // Run viewfinder instance immediately
   // Opens web socket
   try {
@@ -142,6 +148,8 @@ const createWindow = async () => {
     mainWindow.show();
     mainWindow.setKiosk(true);
     mainWindow.maximize();
+
+    mainWindow.setFullScreen(true);
   });
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
@@ -167,9 +175,13 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
+  //TODO: DISABLE THIS LATER
+
+  mainWindow.webContents.openDevTools();
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  //new AppUpdater();
 };
 
 /**

@@ -87,7 +87,7 @@ class MediaService {
 
     const targetPath = File.exportDir();
 
-    const COMMAND = `ffmpeg -framerate 10 -i ${path}/%d.jpg -vf "fps=10" -pix_fmt yuv420p ./video.mp4`;
+    const COMMAND = `ffmpeg -framerate 10 -i ${path}/%d.jpg -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -pix_fmt yuv420p ./video.mp4`;
 
     const process = spawn('bash', ['-c', COMMAND], {
       cwd: targetPath,

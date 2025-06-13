@@ -6,8 +6,8 @@ interface CameraPreviewProps {
   pause?: boolean;
 }
 const CameraPreview = ({
-  width = '1920',
-  height = '920',
+  width = (window.innerWidth / 2).toString(),
+  height = (window.innerHeight / 2).toString(),
   pause = false,
 }: CameraPreviewProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

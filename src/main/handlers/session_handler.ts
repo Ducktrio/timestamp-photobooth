@@ -15,10 +15,11 @@ export const registerSessionHandlers = () => {
   ipcMain.handle('session/end', async () => {
     try {
       await File.cleanWorkspace();
-      app.relaunch();
-      app.exit(0);
     } catch (error) {
       throw error;
     }
+
+    app.relaunch();
+    app.exit();
   });
 };

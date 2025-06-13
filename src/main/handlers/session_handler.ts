@@ -26,6 +26,6 @@ export const registerSessionHandlers = () => {
     }
 
     app.relaunch(options);
-    app.exit();
+    app.exit(0);
   });
 };

@@ -114,12 +114,6 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
-    kiosk: true,
-    fullscreen: true,
-    fullscreenable: true,
-    autoHideMenuBar: true,
-    resizable: false,
-
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -148,6 +142,9 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+  });
+  mainWindow.once('focus', () => {
+    mainWindow?.setKiosk(true);
   });
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
@@ -201,8 +198,6 @@ app
     createWindow();
 
     setupGlobalErrorHandler(mainWindow!);
-
-    mainWindow?.setFullScreen(true);
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

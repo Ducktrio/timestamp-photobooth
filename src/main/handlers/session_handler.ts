@@ -22,12 +22,10 @@ export const registerSessionHandlers = () => {
     const execPath = process.env.APPIMAGE;
 
     if (execPath) {
-      setTimeout(() => {
-        spawn(execPath, {
-          detached: true,
-          stdio: 'ignore',
-        }).unref();
-      }, 3000);
+      spawn(execPath, {
+        detached: true,
+        stdio: 'ignore',
+      }).unref();
       app.exit(0);
     } else {
       app.relaunch();

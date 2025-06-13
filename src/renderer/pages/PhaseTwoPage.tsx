@@ -14,7 +14,7 @@ import useIdle from 'renderer/hooks/useIdle';
  */
 export default function PhaseTwoPage() {
   const data = sessionData();
-  const idle = useIdle(10000, true);
+  const idle = useIdle(60000, true);
 
   const [selected, setSelected] = useState(-1);
 

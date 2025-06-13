@@ -19,7 +19,13 @@ export const registerSessionHandlers = () => {
       throw error;
     }
 
-    app.relaunch();
+    const options: any = {};
+    if (process.env.APPIMAGE) {
+      options.execPath = process.env.APPIMAGE;
+      options.args.unshift('--appimage-extract-and-run');
+    }
+
+    app.relaunch(options);
     app.exit();
   });
 };

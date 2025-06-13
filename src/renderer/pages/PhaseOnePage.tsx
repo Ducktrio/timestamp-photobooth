@@ -19,7 +19,7 @@ export default function PhaseOnePage() {
   const [selected, setSelected] = useState<number>(-1);
   const phase = usePhase();
   const data = sessionData();
-  const idle = useIdle(10000, true);
+  const idle = useIdle(60000, true);
   const [options] = useState<Options[]>([
     {
       label: 'Wide',

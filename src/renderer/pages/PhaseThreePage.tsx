@@ -23,7 +23,7 @@ enum State {
 export default function PhaseThreePage() {
   const data = sessionData();
   const phase = usePhase();
-  const idle = useIdle(18000, true);
+  const idle = useIdle(200000, true);
   const [state, setState] = useState<State>(State.LOADING);
   const [error, setError] = useState<Error | null>(null);
   const [token, setToken] = useState('');

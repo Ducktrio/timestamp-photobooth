@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react';
-import { ImageCache } from 'renderer/utilities/ImageCache';
 
 const LazyImage = ({
   src,
@@ -10,16 +9,12 @@ const LazyImage = ({
   alt?: string;
   className?: string;
 }) => {
-  const [isLoaded, setIsLoaded] = useState(ImageCache.has(src));
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (ImageCache.has(src)) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsLoaded(true);
-          ImageCache.add(src);
           observer.disconnect();
         }
       },
@@ -36,7 +31,6 @@ const LazyImage = ({
   return (
     <img
       ref={imgRef}
-      src={isLoaded ? src : ''}
       data-src={src}
       alt={alt}
       loading="lazy"

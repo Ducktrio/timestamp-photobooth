@@ -137,6 +137,15 @@ const configuration: webpack.Configuration = {
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
     }),
+
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(webpackPaths.rootPath, 'public'),
+          to: path.join(webpackPaths.distRendererPath),
+        },
+      ],
+    }),
   ],
 };
 

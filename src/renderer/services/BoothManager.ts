@@ -48,8 +48,6 @@ export default class BoothManager {
 
     await window.electron.session.begin();
 
-    // TODO: UNCOMMENT THIS
-    /**
     await window.electron.camera
       .status()
       .then((status) => {
@@ -59,7 +57,6 @@ export default class BoothManager {
       .catch((error) => {
         throw error;
       });
-    */
   }
 
   public static async end() {

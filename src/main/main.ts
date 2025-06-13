@@ -114,8 +114,12 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
-    fullscreen: true,
     kiosk: true,
+    fullscreen: true,
+    fullscreenable: true,
+    autoHideMenuBar: true,
+    resizable: false,
+
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -197,6 +201,8 @@ app
     createWindow();
 
     setupGlobalErrorHandler(mainWindow!);
+
+    mainWindow?.setFullScreen(true);
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

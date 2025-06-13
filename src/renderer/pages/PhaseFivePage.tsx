@@ -38,6 +38,7 @@ export default function PhaseFivePage() {
     if (state === State.READY) return;
     (async () => {
       setState(State.CAPTURING);
+      setHasCaptured(false);
 
       // trigger camera capture
       await camera.trigger();

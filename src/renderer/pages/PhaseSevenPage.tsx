@@ -13,7 +13,7 @@ export default function PhaseSevenPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasor = useRef<Canvasor | null>(null);
   const data = sessionData();
-  const frames = useFetchFrames(data.count!);
+  const frames = useFetchFrames(data.count!, null, data.split!);
   const phase = usePhase();
 
   useEffect(() => {

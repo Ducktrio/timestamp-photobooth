@@ -33,16 +33,15 @@ export default function PhaseTenPage() {
   }, []);
 
   useEffect(() => {
-    if (qrRef.current)
-      new QRCode(qrRef.current, {
-        text: data.page!,
-        width: 128,
-        height: 128,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H,
-      });
-  }, [qrRef.current]);
+    new QRCode(qrRef.current!, {
+      text: data.page!,
+      width: 128,
+      height: 128,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H,
+    });
+  }, []);
 
   const handleEnd = async () => {
     await BoothManager.end();

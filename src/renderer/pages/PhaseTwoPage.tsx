@@ -61,7 +61,7 @@ export default function PhaseTwoPage() {
       </Selector>
 
       <div className="w-full flex justify-start items-center">
-        <small className="text-xl">
+        <small className="text-4xl">
           estimated price: Rp. {data.frame!.price * options[selected]}
         </small>
       </div>

@@ -10,6 +10,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
+import CopyPlugin from 'copy-webpack-plugin';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -59,6 +60,7 @@ const configuration: webpack.Configuration = {
     library: {
       type: 'umd',
     },
+    assetModuleFilename: 'assets/[hash][ext][query]',
   },
 
   module: {
@@ -104,7 +106,7 @@ const configuration: webpack.Configuration = {
       },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|mp3)$/i,
         type: 'asset/resource',
       },
     ],
@@ -160,7 +162,7 @@ const configuration: webpack.Configuration = {
   ],
 
   node: {
-    __dirname: false,
+    __dirname: true,
     __filename: false,
   },
 

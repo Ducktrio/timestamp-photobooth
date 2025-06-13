@@ -28,6 +28,8 @@ export default function PhaseFivePage() {
   const camera = useCameraTrigger();
   const srcs = useFetchCaptures(stage);
   const phase = usePhase();
+  const [onStream, setOnStream] = useState(false);
+  const [hasCaptured, setHasCaptured] = useState(false);
 
   /**
    * Effect runs when timer runs out
@@ -36,6 +38,7 @@ export default function PhaseFivePage() {
     if (state === State.READY) return;
     (async () => {
       setState(State.CAPTURING);
+      setHasCaptured(false);
 
       // trigger camera capture
       await camera.trigger();
@@ -47,9 +50,21 @@ export default function PhaseFivePage() {
         return;
       }
 
-      setState(State.READY);
+      setHasCaptured(true);
     })();
   }, [trigger]);
+
+  useEffect(() => {
+    if (timer <= 3 && timer > 0) {
+      const beep = new Audio('beep.mp3');
+
+      beep.play();
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    if (onStream && hasCaptured) handleStart();
+  }, [onStream, hasCaptured]);
 
   /**
    * Start counting (the timer hook starts)
@@ -65,7 +80,7 @@ export default function PhaseFivePage() {
     <>
       {
         // record attribute only when its counting to capture}
-        <Viewfinder pause={state === State.CAPTURING} />
+        <Viewfinder pause={state === State.CAPTURING} onStream={setOnStream} />
       }
       <Page className="flex flex-col justify-between items-center z-[1] overflow-y-hidden">
         <h1 className="text-4xl z-[1] text-surface font-bold">Make a Pose!</h1>
@@ -85,7 +100,7 @@ export default function PhaseFivePage() {
             }}
           >
             {state === State.READY
-              ? 'Continue'
+              ? 'Start'
               : state === State.CAPTURING
               ? 'Processing'
               : timer}

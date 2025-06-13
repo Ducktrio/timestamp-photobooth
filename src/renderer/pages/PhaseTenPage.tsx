@@ -35,8 +35,8 @@ export default function PhaseTenPage() {
   useEffect(() => {
     new QRCode(qrRef.current!, {
       text: data.page!,
-      width: 128,
-      height: 128,
+      width: 256,
+      height: 256,
       colorDark: '#000000',
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H,
@@ -67,8 +67,8 @@ export default function PhaseTenPage() {
       <div className="flex-1 flex flex-col items-center justify-evenly gap-12 p-12">
         <h1 className="font-bold text-4xl">Thank you for the memories :D</h1>
 
-        <div className="flex flex-col items-center justify-evenly p-8 rounded bg-surface text-on-surface">
-          <h1 className="font-bold text-xl">Scan to download</h1>
+        <div className="flex flex-col items-center justify-evenly p-8 gap-8 rounded bg-surface text-on-surface">
+          <h1 className="font-bold text-2xl">Scan to download</h1>
           <div ref={qrRef}></div>
         </div>
 

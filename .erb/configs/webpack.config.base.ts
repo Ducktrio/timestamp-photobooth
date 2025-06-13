@@ -5,7 +5,6 @@
 import webpack from 'webpack';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
-import path from 'path/posix';
 
 const configuration: webpack.Configuration = {
   externals: [...Object.keys(externals || {})],
@@ -26,7 +25,7 @@ const configuration: webpack.Configuration = {
         },
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|mp3)$/i,
         use: [
           {
             loader: 'file-loader',

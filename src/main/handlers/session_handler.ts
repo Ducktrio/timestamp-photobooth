@@ -1,5 +1,5 @@
-import { execFile } from 'child_process';
-import { ipcMain, app, RelaunchOptions } from 'electron';
+import { spawn } from 'child_process';
+import { ipcMain, app } from 'electron';
 import { CameraDriver } from '../drivers/camera';
 import { File } from '../services/file_service';
 
@@ -19,18 +19,19 @@ export const registerSessionHandlers = () => {
     } catch (error) {
       throw error;
     }
+    const execPath = process.env.APPIMAGE;
 
-    const options: RelaunchOptions = {
-      execPath: process.execPath,
-      args: process.argv.slice(1).concat(['--relaunch']),
-    };
-    if (process.env.APPIMAGE && app.isPackaged) {
-      execFile(process.env.APPIMAGE, options.args);
-      app.quit();
-      return;
+    if (execPath) {
+      setTimeout(() => {
+        spawn(execPath, {
+          detached: true,
+          stdio: 'ignore',
+        }).unref();
+      }, 3000);
+      app.exit(0);
+    } else {
+      app.relaunch();
+      app.exit(0);
     }
-
-    app.relaunch(options);
-    app.quit();
   });
 };

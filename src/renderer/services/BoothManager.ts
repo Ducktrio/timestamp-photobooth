@@ -45,7 +45,9 @@ export default class BoothManager {
       .catch((error: AxiosError) => {
         throw error;
       });
+
     await window.electron.session.begin();
+
     await window.electron.camera
       .status()
       .then((status) => {

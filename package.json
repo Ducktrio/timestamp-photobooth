@@ -149,6 +149,7 @@
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
     "concurrently": "^7.1.0",
+    "copy-webpack-plugin": "^13.0.0",
     "core-js": "^3.22.5",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",

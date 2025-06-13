@@ -114,8 +114,11 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
-    show: false,
+    kiosk: true,
     fullscreen: true,
+    fullscreenable: true,
+    autoHideMenuBar: true,
+    resizable: false,
 
     icon: getAssetPath('icon.png'),
     webPreferences: {
@@ -145,11 +148,6 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.show();
-    mainWindow.setKiosk(true);
-    mainWindow.maximize();
-
-    mainWindow.setFullScreen(true);
   });
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
@@ -166,22 +164,15 @@ const createWindow = async () => {
     mainWindow?.webContents.send('throw', error);
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
 
-  //TODO: DISABLE THIS LATER
-
-  mainWindow.webContents.openDevTools();
-
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  //new AppUpdater();
+  new AppUpdater();
 };
 
 /**
@@ -210,6 +201,8 @@ app
     createWindow();
 
     setupGlobalErrorHandler(mainWindow!);
+
+    mainWindow?.setFullScreen(true);
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

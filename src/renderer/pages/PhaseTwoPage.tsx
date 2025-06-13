@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExitButton from 'renderer/components/ExitButton';
+import Icon from 'renderer/components/Icon';
 import NextButton from 'renderer/components/NextButton';
 import Page from 'renderer/components/Page';
 import Selector from 'renderer/components/Selector';
@@ -48,21 +49,26 @@ export default function PhaseTwoPage() {
       <h1 className="text-8xl font-bold">How many prints?</h1>
 
       <Selector
+        defaultIndex={0}
         onSelected={(index) => {
           setSelected(index);
-          console.log(index);
         }}
       >
         {options.map((opt, index) => (
           <div key={index}>
-            <span className="text-[8rem] font-thin mx-auto">{opt}</span>
+            <span className="text-[8rem] font-thin mx-auto outline-primary">
+              {opt}
+            </span>
           </div>
         ))}
       </Selector>
 
-      <div className="w-full flex justify-start items-center">
-        <small className="text-xl">
+      <div className="w-full flex justify-between items-center">
+        <small className="text-4xl">
           estimated price: Rp. {data.frame!.price * options[selected]}
+        </small>
+        <small className="flex items-center gap-12 text-4xl">
+          Scroll for more <Icon type="right" size="2rem"></Icon>
         </small>
       </div>
     </Page>

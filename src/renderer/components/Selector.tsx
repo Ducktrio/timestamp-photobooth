@@ -11,21 +11,25 @@ import LoadingAnimation from './LoadingAnimation';
 interface SelectorProps {
   children: ReactNode;
   onSelected: (index: number) => void;
+  defaultIndex?: number;
   reset?: any;
 }
 
 export default function Selector({
   children,
   onSelected,
+  defaultIndex,
   reset,
 }: SelectorProps) {
-  const [selected, setSelected] = useState<number>(-1);
+  const [selected, setSelected] = useState<number>(
+    defaultIndex ? defaultIndex : -1
+  );
 
   useEffect(() => {
     onSelected(selected);
   }, [selected]);
   useEffect(() => {
-    setSelected(-1);
+    setSelected(defaultIndex ? defaultIndex : -1);
   }, [reset]);
 
   if (Children.count(children) <= 0)
@@ -40,7 +44,13 @@ export default function Selector({
       className="flex flex-row relative w-full gap-[12rem] snap-x snap-mandatory overflow-x-scroll scrollbar-hide pb-14"
       style={{ scrollbarWidth: 'none' }}
     >
-      <div className="snap-center shrink-0 w-[20rem] p-8"></div>
+      {Children.count(children) > 3 && (
+        <div className="snap-center shrink-0 w-[2rem]"></div>
+      )}
+
+      {Children.count(children) <= 3 && (
+        <div className="snap-center shrink-0 w-[30rem]"></div>
+      )}
 
       {Children.map(children, (child, index) =>
         cloneElement(child as ReactElement, {
@@ -54,9 +64,10 @@ export default function Selector({
           }`,
         })
       )}
-      <div className="p-8 rounded-xl w-[20rem] snap-center shrink-0">
-        <span className="h-[24rem]"> </span>
-      </div>
+
+      {Children.count(children) > 3 && (
+        <div className="snap-center shrink-0 w-[2rem]"></div>
+      )}
     </div>
   );
 }

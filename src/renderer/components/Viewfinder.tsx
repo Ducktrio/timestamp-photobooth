@@ -8,11 +8,13 @@ interface ViewfinderProps {
   width?: string;
   height?: string;
   pause?: boolean;
+  onStream: (isIt: boolean) => void;
 }
 const Viewfinder = ({
   width = window.innerWidth.toString(),
   height = window.innerHeight.toString(),
   pause = false,
+  onStream,
 }: ViewfinderProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const borderRef = useRef<HTMLCanvasElement | null>(null);
@@ -138,6 +140,8 @@ const Viewfinder = ({
   }, [borderRef.current]);
   useEffect(() => {
     if (!canvasRef.current || !stream) return;
+    if (stream) onStream(true);
+    else onStream(false);
 
     const canvas = canvasRef.current.getContext('2d');
     stream.onload = () => {

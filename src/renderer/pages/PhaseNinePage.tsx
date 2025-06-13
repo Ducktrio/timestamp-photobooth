@@ -70,7 +70,7 @@ export default function PhaseNinePage() {
 
         window.electron.media.print(
           data.split ? print! : exports!,
-          data.quantity!,
+          data.split ? data.quantity! / 2 : data.quantity!, // if the frame is split, the quantity obvious to be in multiple of 2 because for one print it will be cut, thus we just have to print half of the number given.
           data.frame?.split!
         );
 

@@ -14,6 +14,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+import CopyPlugin from 'copy-webpack-plugin';
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -41,6 +42,7 @@ const configuration: webpack.Configuration = {
     library: {
       type: 'umd',
     },
+    assetModuleFilename: 'assets/[hash][ext][query]',
   },
 
   module: {
@@ -86,7 +88,7 @@ const configuration: webpack.Configuration = {
       },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|mp3)$/i,
         type: 'asset/resource',
       },
     ],
@@ -116,7 +118,6 @@ const configuration: webpack.Configuration = {
       NODE_ENV: 'production',
       DEBUG_PROD: false,
     }),
-
     new MiniCssExtractPlugin({
       filename: 'style.css',
     }),

@@ -11,21 +11,25 @@ import LoadingAnimation from './LoadingAnimation';
 interface SelectorProps {
   children: ReactNode;
   onSelected: (index: number) => void;
+  defaultIndex?: number;
   reset?: any;
 }
 
 export default function Selector({
   children,
   onSelected,
+  defaultIndex,
   reset,
 }: SelectorProps) {
-  const [selected, setSelected] = useState<number>(-1);
+  const [selected, setSelected] = useState<number>(
+    defaultIndex ? defaultIndex : -1
+  );
 
   useEffect(() => {
     onSelected(selected);
   }, [selected]);
   useEffect(() => {
-    setSelected(-1);
+    setSelected(defaultIndex ? defaultIndex : -1);
   }, [reset]);
 
   if (Children.count(children) <= 0)

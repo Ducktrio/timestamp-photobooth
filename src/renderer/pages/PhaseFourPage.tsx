@@ -42,9 +42,11 @@ export default function PhaseFourPage() {
     );
 
   return (
-    <Page className="flex flex-col justify-evently items-center">
-      <h1 className="text-4xl font-bold">Loading...</h1>
-      <LoadingAnimation />
+    <Page className="flex flex-col justify-evenly gap-12 items-center">
+      <h1 className="text-4xl font-bold">Get Ready!!!</h1>
+      <div className="flex rounded bg-primary p-8">
+        <LoadingAnimation />
+      </div>
     </Page>
   );
 }

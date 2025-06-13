@@ -40,7 +40,13 @@ export default function Selector({
       className="flex flex-row relative w-full gap-[12rem] snap-x snap-mandatory overflow-x-scroll scrollbar-hide pb-14"
       style={{ scrollbarWidth: 'none' }}
     >
-      <div className="snap-center shrink-0 w-[20rem] p-8"></div>
+      {Children.count(children) > 3 && (
+        <div className="snap-center shrink-0 w-[2rem]"></div>
+      )}
+
+      {Children.count(children) <= 3 && (
+        <div className="snap-center shrink-0 w-[30rem]"></div>
+      )}
 
       {Children.map(children, (child, index) =>
         cloneElement(child as ReactElement, {
@@ -54,9 +60,10 @@ export default function Selector({
           }`,
         })
       )}
-      <div className="p-8 rounded-xl w-[20rem] snap-center shrink-0">
-        <span className="h-[24rem]"> </span>
-      </div>
+
+      {Children.count(children) > 3 && (
+        <div className="snap-center shrink-0 w-[2rem]"></div>
+      )}
     </div>
   );
 }

@@ -115,7 +115,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     fullscreen: true,
-
+    kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -144,8 +144,6 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.show();
-    mainWindow.setKiosk(true);
   });
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
@@ -162,22 +160,15 @@ const createWindow = async () => {
     mainWindow?.webContents.send('throw', error);
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
 
-  //TODO: DISABLE THIS LATER
-
-  mainWindow.webContents.openDevTools();
-
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  //new AppUpdater();
+  new AppUpdater();
 };
 
 /**

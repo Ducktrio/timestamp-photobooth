@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExitButton from 'renderer/components/ExitButton';
+import Icon from 'renderer/components/Icon';
 import LazyImage from 'renderer/components/LazyImage';
 import NextButton from 'renderer/components/NextButton';
 import Page from 'renderer/components/Page';
@@ -50,7 +51,7 @@ export default function PhaseOnePage() {
   };
 
   return (
-    <Page className="flex flex-col justify-between items-center">
+    <Page className="flex flex-col justify-evenly items-center relative">
       <ExitButton />
       {selected != -1 && (
         <NextButton
@@ -70,7 +71,7 @@ export default function PhaseOnePage() {
               setCategory(option);
               setSelected(-1);
             }}
-            className={`px-24 py-4 text-2xl ${
+            className={`px-24 py-4 text-4xl ${
               option === category ? 'border-b-8 border-on-surface' : ''
             }`}
           >
@@ -78,7 +79,6 @@ export default function PhaseOnePage() {
           </div>
         ))}
       </div>
-
       <Selector
         onSelected={(index) => {
           setSelected(index);
@@ -94,6 +94,14 @@ export default function PhaseOnePage() {
           </div>
         ))}
       </Selector>
+
+      {frames.length > 3 && (
+        <div className="flex justify-evenly">
+          <div className="flex gap-4 items-center">
+            Scroll for more <Icon type="right"></Icon>
+          </div>
+        </div>
+      )}
     </Page>
   );
 }

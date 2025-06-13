@@ -13,7 +13,6 @@ const useScript = (src: string, attributes?: Record<string, string>) => {
     let script = document.createElement('script');
 
     script.src = src;
-    script.async = true;
     script.onload = () => {
       console.log('SNAP JS script loaded');
     };
@@ -28,7 +27,7 @@ const useScript = (src: string, attributes?: Record<string, string>) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [src, attributes]);
+  }, []);
 };
 
 export default useScript;

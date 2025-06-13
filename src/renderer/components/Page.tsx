@@ -17,7 +17,7 @@ export default function Page({
   style,
   fullscreen = false,
 }: PageProps) {
-  const styles = `min-h-lvh max-h-lvh flex text-on-surface ${
+  const styles = `min-h-lvh  flex text-on-surface ${
     fullscreen ? '' : 'p-[4rem]'
   } ${className}`;
 

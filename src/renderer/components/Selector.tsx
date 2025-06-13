@@ -40,17 +40,10 @@ export default function Selector({
     );
 
   return (
-    <div
-      className="flex flex-row relative w-full gap-[12rem] snap-x snap-mandatory overflow-x-scroll scrollbar-hide pb-14"
-      style={{ scrollbarWidth: 'none' }}
-    >
-      {Children.count(children) > 3 && (
-        <div className="snap-center shrink-0 w-[2rem]"></div>
-      )}
-
-      {Children.count(children) <= 3 && (
-        <div className="snap-center shrink-0 w-[30rem]"></div>
-      )}
+    <div className="relative max-w-[72rem] flex gap-32 snap-x snap-mandatory overflow-x-auto pb-14 scrollbar">
+      <div className="snap-center shrink-0">
+        <div className="shrink-0 w-[18rem]"></div>
+      </div>
 
       {Children.map(children, (child, index) =>
         cloneElement(child as ReactElement, {
@@ -59,15 +52,15 @@ export default function Selector({
           },
 
           disabled: index === selected ? true : false,
-          className: `flex p-8 rounded-xl w-[20rem] snap-center shrink-0 ${
+          className: `flex p-8 rounded-xl w-80 snap-center shrink-0 ${
             index === selected ? 'bg-surface-container-highest' : ''
           }`,
         })
       )}
 
-      {Children.count(children) > 3 && (
-        <div className="snap-center shrink-0 w-[2rem]"></div>
-      )}
+      <div className="snap-center shrink-0">
+        <div className="shrink-0 w-[18rem]"></div>
+      </div>
     </div>
   );
 }

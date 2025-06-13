@@ -51,7 +51,7 @@ export default function PhaseOnePage() {
   };
 
   return (
-    <Page className="flex flex-col justify-evenly items-center relative">
+    <Page className="flex flex-col justify-evenly items-center relative overflow-hidden">
       <ExitButton />
       {selected != -1 && (
         <NextButton

@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -146,11 +146,11 @@ const createWindow = async () => {
   mainWindow.once('focus', () => {
     mainWindow?.setKiosk(true);
   });
-  mainWindow.webContents.addListener('will-redirect', (ev) => {
+  mainWindow.webContents.addListener('will-navigate', (ev) => {
     ev.preventDefault();
   });
 
-  mainWindow.webContents.addListener('will-navigate', (ev) => {
+  session.defaultSession.on('will-download', (ev) => {
     ev.preventDefault();
   });
   mainWindow.on('closed', () => {

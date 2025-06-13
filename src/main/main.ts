@@ -114,7 +114,6 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
-    show: false,
     fullscreen: true,
 
     icon: getAssetPath('icon.png'),
@@ -147,9 +146,6 @@ const createWindow = async () => {
     }
     mainWindow.show();
     mainWindow.setKiosk(true);
-    mainWindow.maximize();
-
-    mainWindow.setFullScreen(true);
   });
   mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();

@@ -1,31 +1,40 @@
-name: Build and Release Electron App
+name: Build and Release
 
 on:
   push:
-    branches:
-      - release
-
+    tags:
+      - 'v*'
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build the app
-        run: npm run build
+      - name: Run build script
+        run: npm run package
 
-      - name: Package with electron-builder
-        run: npx electron-builder --linux AppImage --publish always
+      - name: Archive build artifacts
+        run: |
+          mkdir dist
+          rsync -av --exclude='linux-unpacked/' release/build/ dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: dist/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

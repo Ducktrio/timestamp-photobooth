@@ -21,7 +21,7 @@ export default function PhaseFivePage() {
   const INTERVAL = 5;
 
   //const MAX_STAGE = 2 * 2;
-  const MAX_STAGE = data.count;
+  const MAX_STAGE = data.count * 2;
   const [stage, setStage] = useState<number>(1);
   const [state, setState] = useState<State>(State.READY);
   const [timer, trigger] = useCountdown(INTERVAL, state === State.COUNTING);

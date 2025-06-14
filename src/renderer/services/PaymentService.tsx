@@ -18,7 +18,7 @@ export default class PaymentService {
     frameId: string,
     quantity: number
   ): Promise<string | void> {
-    await api
+    return await api
       .post('/transactions', {
         FrameId: frameId,
         quantity: quantity,

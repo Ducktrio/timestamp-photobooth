@@ -68,10 +68,11 @@ export default function PhaseSixPage() {
         </div>
 
         {/** Panel */}
-        <div className="flex-1 flex flex-col items-center justify-evenly">
+        <div className="flex-1 flex flex-col items-center justify-between">
           <h1 className="font-bold text-4xl">Choose your photos!</h1>
           <div
-            className="flex-1 flex flex-wrap rounded-xl bg-surface-container-highest max-h-[60vh] max-w-[40vw] p-12 overflow-y-auto overflow-x-hidden scroll-smooth gap-4 items-start justify-start
+            className="flex-1 w-full flex flex-wrap rounded-xl outline outline-4 outline-outline bg-surface max-h-[60vh] max-w-[40vw] p-[4rem]
+            overflow-y-auto overflow-x-hidden scroll-smooth items-start justify-between
             scrollbar-hide"
           >
             {pictures.map((pict, index) => (

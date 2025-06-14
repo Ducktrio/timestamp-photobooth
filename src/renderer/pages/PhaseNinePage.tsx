@@ -105,18 +105,20 @@ export default function PhaseNinePage() {
     );
 
   return (
-    <Page className="flex flex-row justify-evenly items-center">
+    <Page className="flex flex-row justify-center gap-12 items-center">
       <div className="flex-1 flex flex-col justify-evenly items-center rounded bg-surface outline shadow-xl p-12 gap-12 min-h-[80vh]">
         <div>
-          <h1 className="font-bold text-8xl">Are you sure with your picks?</h1>
+          <h1 className="font-bold text-8xl text-right">
+            Are you sure with your picks?
+          </h1>
         </div>
 
-        <div className="flex flex-row gap-12 justify-between">
+        <div className="flex gap-12 items-stretch justify-end">
           <Button variant="outline" onClick={() => handleCancel()}>
-            Not yet, go back
+            Not yet
           </Button>
           <Button variant="fill" onClick={() => handleConfirm()}>
-            Yes, I'm sure
+            Yes
           </Button>
         </div>
       </div>

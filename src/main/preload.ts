@@ -59,7 +59,7 @@ contextBridge.exposeInMainWorld('electron', {
     SNAP_SCRIPT:
       process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development'
         ? 'https://app.sandbox.midtrans.com/snap/snap.js'
-        : null,
+        : 'https://app.sandbox.midtrans.com/snap/snap.js', // TODO: CHANGE THIS WHEN MIDTRANS ISSUE RESOLVED
     ENV: process.env.NODE_ENV,
   },
   logger: {

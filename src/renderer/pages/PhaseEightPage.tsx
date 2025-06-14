@@ -68,7 +68,7 @@ export default function PhaseEightPage() {
         <h1 className="font-bold text-4xl">Choose the filter!</h1>
 
         <div
-          className="flex-1 flex flex-wrap rounded-xl bg-surface-container max-h-[60vh] max-w-[40vw]
+          className="flex-1 flex flex-wrap rounded-xl bg-surface-container outline outline-4 outline-outline max-h-[60vh] max-w-[40vw]
           p-12 overflow-y-auto overflow-x-hidden scroll-smooth gap-12
           items-center justify-evenly
             scrollbar-hide"
@@ -77,7 +77,9 @@ export default function PhaseEightPage() {
             <button
               key={index}
               className={`p-12 rounded outline outline-primary w-[18rem] text-xl ${
-                index === selected ? 'bg-primary text-on-primary' : ''
+                index === selected
+                  ? 'bg-primary text-on-primary'
+                  : 'bg-surface text-on-surface'
               }`}
               onClick={() => handleSelect(index)}
               disabled={index === selected}

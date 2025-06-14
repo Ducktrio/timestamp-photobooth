@@ -59,8 +59,7 @@ export default function PhaseThreePage() {
 
   useEffect(() => {
     if (state === State.RUNNING && token)
-      window.snap.embed(token, {
-        embedId: 'snap-container',
+      window.snap.pay(token, {
         onSuccess: function (result: PaymentCallback) {
           data.setPayment(result);
           window.electron.logger.info('A transaction has been settled', result);

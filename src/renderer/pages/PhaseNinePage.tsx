@@ -4,6 +4,7 @@ import LoadingAnimation from 'renderer/components/LoadingAnimation';
 import Page from 'renderer/components/Page';
 import { sessionData } from 'renderer/contexts/DataContext';
 import { usePhase } from 'renderer/contexts/PhaseContext';
+import useFetchCaptures from 'renderer/hooks/useFetchCaptures';
 import Canvasor from 'renderer/modules/Canvasor';
 
 enum State {
@@ -17,6 +18,7 @@ export default function PhaseNinePage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasor = useRef<Canvasor | null>(null);
+  const captures = useFetchCaptures();
 
   const data = sessionData();
   const phase = usePhase();
@@ -47,6 +49,7 @@ export default function PhaseNinePage() {
       phase.next();
     }
     if (state !== State.PROCESSING) return;
+    if (!captures) return;
 
     (async () => {
       await window.electron.media.renderVideo();
@@ -75,16 +78,16 @@ export default function PhaseNinePage() {
         );
 
         const url = await window.electron.media.upload(
-          data.pictures.length + 1,
-          data.pictures!
-        ); // Pictures and the canvas
+          captures.length + 1,
+          captures
+        ); // Captures and the canvas
 
         data.setPage(url);
 
         setState(State.PROCEED);
       };
     })();
-  }, [state]);
+  }, [state, captures]);
 
   const handleCancel = () => {
     phase.previous();

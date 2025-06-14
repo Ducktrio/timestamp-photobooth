@@ -71,7 +71,7 @@ export default function PhaseSixPage() {
         <div className="flex-1 flex flex-col items-center justify-between">
           <h1 className="font-bold text-4xl">Choose your photos!</h1>
           <div
-            className="flex-1 w-full flex flex-wrap rounded-xl outline outline-4 outline-outline bg-surface max-h-[60vh] max-w-[40vw] p-[4rem]
+            className="flex-1 w-full flex flex-wrap rounded-xl gap-16 outline outline-4 outline-outline bg-surface max-h-[60vh] max-w-[40vw] p-[4rem]
             overflow-y-auto overflow-x-hidden scroll-smooth items-start justify-between
             scrollbar-hide"
           >

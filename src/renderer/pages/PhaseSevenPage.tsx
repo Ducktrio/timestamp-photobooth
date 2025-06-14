@@ -72,7 +72,7 @@ export default function PhaseSevenPage() {
         <h1 className="font-bold text-4xl">Choose the frame!</h1>
 
         <div
-          className="flex-1 flex w-full flex-wrap rounded-xl outline outline-4 outline-outline bg-surface max-h-[60vh] max-w-[40vw] p-[4rem]
+          className="flex-1 flex w-full flex-wrap rounded-xl gap-4 outline outline-4 outline-outline bg-surface max-h-[60vh] max-w-[40vw] p-[4rem]
           overflow-y-auto overflow-x-hidden scroll-smooth items-start justify-between
             scrollbar-hide"
         >

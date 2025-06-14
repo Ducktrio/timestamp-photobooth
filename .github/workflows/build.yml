@@ -2,8 +2,6 @@ name: Build and Release
 
 on:
   push:
-    branches:
-      - release
     tags:
       - 'v*'
 jobs:
@@ -30,7 +28,7 @@ jobs:
       - name: Archive build artifacts
         run: |
           mkdir dist
-          cp -r release/build/* dist/
+          rsync -av --exclude='linux-unpacked/' release/build/ dist/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

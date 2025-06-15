@@ -20,6 +20,7 @@ import PhaseNinePage from './pages/PhaseNinePage';
 import PhaseTenPage from './pages/PhaseTenPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorFallback from './components/ErrorFallback';
+import { useState } from 'react';
 AOS.init({
   duration: 1500,
   mirror: true,
@@ -27,13 +28,15 @@ AOS.init({
 });
 
 export default function App() {
+  const [appKey, setAppKey] = useState(0);
+  const resetApp = () => setAppKey((prev) => prev + 1);
   return (
-    <ErrorBoundary fallback={<ErrorFallback />}>
+    <ErrorBoundary fallback={<ErrorFallback />} key={appKey}>
       <DataProvider>
         <PopupProvider>
           <Popup />
           <HashRouter>
-            <PhaseProvider>
+            <PhaseProvider resetKey={resetApp}>
               <AppInitiators>
                 <Routes>
                   <Route path="/" element={<WelcomePage />}></Route>

@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron';
 import { CameraDriver } from '../drivers/camera';
 import { WebSocketServer } from 'ws';
+import { CameraService } from './camera_service';
 
 export const ViewfinderService = (window: BrowserWindow) => {
   const wss = new WebSocketServer({ port: 8080 });
@@ -9,6 +10,8 @@ export const ViewfinderService = (window: BrowserWindow) => {
   wss.on('connection', async (ws) => {
     console.log('socket new client');
     let buffer = Buffer.alloc(0);
+    if (!(await CameraService.status()))
+      throw new Error('Camera is not readed for capture');
 
     try {
       CameraDriver.start_stream((chunk) => {
@@ -22,7 +25,7 @@ export const ViewfinderService = (window: BrowserWindow) => {
           }
       });
     } catch (error) {
-      ws.send(error as Error);
+      ws.send(error as string);
     }
 
     ws.on('close', async () => {

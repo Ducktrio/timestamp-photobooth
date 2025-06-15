@@ -3,6 +3,14 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
+  reboot: (callback: () => void) => {
+    ipcRenderer.on('reboot', callback);
+  },
+  onUpdateStatus: (callback: (status: string, data?: any) => void) => {
+    ipcRenderer.on('update-status', (_event, status, data) => {
+      callback(status, data);
+    });
+  },
   camera: {
     status: async () => {
       return await ipcRenderer.invoke('camera/status');

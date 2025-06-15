@@ -4,6 +4,12 @@ declare global {
   interface Window {
     electron: {
       /**
+       * Reboot
+       */
+      reboot: (callback: () => void) => void;
+
+      onUpdateStatus: (callback: (status: string, data?: any) => void) => void;
+      /**
        * Logs to main process
        */
       logger: {

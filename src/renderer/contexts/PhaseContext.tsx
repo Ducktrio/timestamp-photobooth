@@ -11,16 +11,15 @@ interface PhaseContextValue {
 
 const PhaseContext = createContext<PhaseContextValue | undefined>(undefined);
 
-export const PhaseProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const PhaseProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [currentPhase, setPhase] = useState(0);
   const navigate = useNavigate();
 
   const next = () => {
     navigate(`/phase${currentPhase + 1}`);
     setPhase(currentPhase + 1);
-    // SessionService.next();
   };
 
   const previous = () => {
@@ -35,7 +34,6 @@ export const PhaseProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const restart = () => {
     setPhase(0);
-    navigate('/');
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sessionData } from 'renderer/contexts/DataContext';
 import useBorderline from 'renderer/hooks/useBorderline';
 import useMotion from 'renderer/hooks/useMotion';
@@ -115,12 +115,12 @@ const Viewfinder = ({
     wsRef.current.onclose = () => console.log('socket disconnected');
   };
   */
-
   useEffect(() => {
     if (!canvasRef.current) return;
     if (pause) motion.stop();
     else motion.run();
   }, [pause]);
+
   useEffect(() => {
     if (!borderRef.current) return;
 
@@ -129,7 +129,7 @@ const Viewfinder = ({
     // draw borderline
     border?.beginPath();
     border?.setLineDash([2, 2]);
-    border!.strokeStyle = 'white';
+    border!.strokeStyle = window.electron.config.BORDER_COLOR ?? '#000';
     border!.lineWidth = 1;
 
     let x = (canvasRef.current?.width! - bWidth) / 2;

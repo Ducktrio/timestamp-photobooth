@@ -80,7 +80,10 @@ export default function PhaseFivePage() {
     <>
       {
         // record attribute only when its counting to capture}
-        <Viewfinder pause={state === State.CAPTURING} onStream={setOnStream} />
+        <Viewfinder
+          pause={state === State.CAPTURING || state === State.FINISH}
+          onStream={setOnStream}
+        />
       }
       <Page className="flex flex-col justify-between items-center z-[1] overflow-y-hidden">
         <h1 className="text-4xl z-[1] text-surface font-bold">Make a Pose!</h1>

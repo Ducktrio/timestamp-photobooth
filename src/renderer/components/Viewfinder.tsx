@@ -120,6 +120,7 @@ const Viewfinder = ({
     if (pause) motion.stop();
     else motion.run();
   }, [pause]);
+
   useEffect(() => {
     if (!borderRef.current) return;
 

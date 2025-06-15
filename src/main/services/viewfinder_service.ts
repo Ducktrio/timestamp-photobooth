@@ -1,7 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { CameraDriver } from '../drivers/camera';
 import { WebSocketServer } from 'ws';
-import { CameraService } from './camera_service';
 
 export const ViewfinderService = (window: BrowserWindow) => {
   const wss = new WebSocketServer({ port: 8080 });

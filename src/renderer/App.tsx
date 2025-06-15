@@ -31,31 +31,33 @@ export default function App() {
   const [appKey, setAppKey] = useState(0);
   const resetApp = () => setAppKey((prev) => prev + 1);
   return (
-    <ErrorBoundary fallback={<ErrorFallback />} key={appKey}>
-      <DataProvider>
-        <PopupProvider>
-          <Popup />
-          <HashRouter>
-            <PhaseProvider resetKey={resetApp}>
-              <AppInitiators>
-                <Routes>
-                  <Route path="/" element={<WelcomePage />}></Route>
-                  <Route path="/phase1" element={<PhaseOnePage />}></Route>
-                  <Route path="/phase2" element={<PhaseTwoPage />}></Route>
-                  <Route path="/phase3" element={<PhaseThreePage />}></Route>
-                  <Route path="/phase4" element={<PhaseFourPage />}></Route>
-                  <Route path="/phase5" element={<PhaseFivePage />}></Route>
-                  <Route path="/phase6" element={<PhaseSixPage />}></Route>
-                  <Route path="/phase7" element={<PhaseSevenPage />}></Route>
-                  <Route path="/phase8" element={<PhaseEightPage />}></Route>
-                  <Route path="/phase9" element={<PhaseNinePage />}></Route>
-                  <Route path="/phase10" element={<PhaseTenPage />}></Route>
-                </Routes>
-              </AppInitiators>
-            </PhaseProvider>
-          </HashRouter>
-        </PopupProvider>
-      </DataProvider>
-    </ErrorBoundary>
+    <div key={appKey}>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <DataProvider>
+          <PopupProvider>
+            <Popup />
+            <HashRouter>
+              <PhaseProvider resetKey={resetApp}>
+                <AppInitiators>
+                  <Routes>
+                    <Route path="/" element={<WelcomePage />}></Route>
+                    <Route path="/phase1" element={<PhaseOnePage />}></Route>
+                    <Route path="/phase2" element={<PhaseTwoPage />}></Route>
+                    <Route path="/phase3" element={<PhaseThreePage />}></Route>
+                    <Route path="/phase4" element={<PhaseFourPage />}></Route>
+                    <Route path="/phase5" element={<PhaseFivePage />}></Route>
+                    <Route path="/phase6" element={<PhaseSixPage />}></Route>
+                    <Route path="/phase7" element={<PhaseSevenPage />}></Route>
+                    <Route path="/phase8" element={<PhaseEightPage />}></Route>
+                    <Route path="/phase9" element={<PhaseNinePage />}></Route>
+                    <Route path="/phase10" element={<PhaseTenPage />}></Route>
+                  </Routes>
+                </AppInitiators>
+              </PhaseProvider>
+            </HashRouter>
+          </PopupProvider>
+        </DataProvider>
+      </ErrorBoundary>
+    </div>
   );
 }

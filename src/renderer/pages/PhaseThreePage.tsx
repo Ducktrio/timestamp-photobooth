@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Button from 'renderer/components/Button';
 import LoadingAnimation from 'renderer/components/LoadingAnimation';
 import Page from 'renderer/components/Page';
 import { sessionData } from 'renderer/contexts/DataContext';
@@ -23,7 +24,8 @@ enum State {
 export default function PhaseThreePage() {
   const data = sessionData();
   const phase = usePhase();
-  const idle = useIdle(200000, true);
+  const [isIdling, setIsIdling] = useState(false);
+  const idle = useIdle(60000, isIdling); // 1 minute
   const [state, setState] = useState<State>(State.LOADING);
   const [error, setError] = useState<Error | null>(null);
   const [token, setToken] = useState('');
@@ -49,7 +51,12 @@ export default function PhaseThreePage() {
 
       setState(State.RUNNING);
     })().catch((error) => {
-      throw error;
+      setState(State.ERROR);
+      setError(error);
+      window.electron.logger.error(
+        'Cannot request payment from backend',
+        error
+      );
     });
   }, []);
 
@@ -58,6 +65,9 @@ export default function PhaseThreePage() {
   };
 
   useEffect(() => {
+    if (state === State.ABORT || state === State.ERROR) setIsIdling(true);
+    else setIsIdling(false);
+
     if (state === State.RUNNING && token)
       window.snap.pay(token, {
         onSuccess: function (result: PaymentCallback) {
@@ -65,10 +75,15 @@ export default function PhaseThreePage() {
           window.electron.logger.info('A transaction has been settled', result);
           handleNext();
         },
-        onPending: function () {},
+        onPending: function () {
+          window.electron.logger.info(
+            'A payment request is closed or left pending'
+          );
+          setState(State.ABORT);
+        },
         onError: function (result: PaymentErrorCallback) {
           window.electron.logger.warn(
-            'Error occured on an attempt of payment',
+            `Error occured on an attempt of payment: ${result.status_message[0]}`,
             result
           );
           setState(State.ERROR);
@@ -76,7 +91,7 @@ export default function PhaseThreePage() {
         },
         onClose: function () {
           window.electron.logger.info('A payment request is closed by user');
-          phase.restart();
+          setState(State.ABORT);
         },
       });
   }, [state]);
@@ -88,13 +103,42 @@ export default function PhaseThreePage() {
       </Page>
     );
 
-  if (state === State.ERROR) throw error;
+  if (state === State.ERROR)
+    return (
+      <Page className="flex flex-col justify-center gap-12 items-center">
+        <h1 className="text-4xl">
+          Your payment failed, we're very sorry for this
+        </h1>
+        <h2 className="text-xl">{error?.message}</h2>
 
-  if (state === State.ABORT) phase.restart();
+        <div className="flex flex-row gap-12">
+          <Button variant="outline" onClick={() => BoothManager.end()}>
+            Retry
+          </Button>
+        </div>
+      </Page>
+    );
 
+  if (state === State.ABORT) {
+    return (
+      <Page className="flex flex-col justify-center gap-12 items-center">
+        <h1 className="text-4xl">Seems like you close or ran out time</h1>
+        <h2 className="text-xl">Are you willing to continue?</h2>
+
+        <div className="flex flex-row gap-12">
+          <Button variant="outline" onClick={() => BoothManager.end()}>
+            Cancel
+          </Button>
+          <Button variant="fill" onClick={() => setState(State.RUNNING)}>
+            Pay again
+          </Button>
+        </div>
+      </Page>
+    );
+  }
   return (
-    <>
-      <div className="w-[40rem] h-[30rem]" id="snap-container"></div>
-    </>
+    <Page className="flex justify-center items-center">
+      <div className="w-[80rem] h-[70rem]" id="snap-container"></div>
+    </Page>
   );
 }

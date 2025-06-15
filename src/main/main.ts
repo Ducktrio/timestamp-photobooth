@@ -10,9 +10,6 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain, session } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
-import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import * as dotenv from 'dotenv';
 import * as os from 'os';
@@ -37,18 +34,6 @@ function loadEnv() {
   console.warn('⚠️ No .env file found in expected locations.');
 }
 
-export default class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.autoDownload = true;
-    autoUpdater.on('update-downloaded', () => {
-      autoUpdater.quitAndInstall(false, true);
-    });
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
-
 let mainWindow: BrowserWindow | null = null;
 
 loadEnv();
@@ -61,11 +46,12 @@ import { registerFileHandlers } from './handlers/file_handler';
 
 registerCameraHandler();
 registerMediaHandler();
-registerSessionHandlers();
 registerFileHandlers();
 
 import { registerLoggingHandlers } from './handlers/logging_handler';
 import { setupGlobalErrorHandler } from './handlers/error_handler';
+import logger from './utilities/logger';
+import AppUpdater from './services/updater_service';
 registerLoggingHandlers();
 
 ipcMain.on('ipc-example', async (event, arg) => {
@@ -146,7 +132,7 @@ const createWindow = async () => {
   mainWindow.once('focus', () => {
     mainWindow?.setKiosk(true);
   });
-  mainWindow.webContents.addListener('will-navigate', (ev) => {
+  mainWindow.webContents.addListener('will-redirect', (ev) => {
     ev.preventDefault();
   });
 
@@ -167,9 +153,11 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
+  registerSessionHandlers(mainWindow!);
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  new AppUpdater(mainWindow);
 };
 
 /**
@@ -191,6 +179,7 @@ app
   .then(() => {
     if (!process.env.BOOTH_TOKEN) {
       console.error('❌ BOOTH_TOKEN is not set in .env!');
+      logger.error('A machine cannot run because no config file is found');
       app.quit();
       return;
     }

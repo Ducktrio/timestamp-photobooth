@@ -11,6 +11,8 @@ export const registerCameraHandler = () => {
   });
   ipcMain.handle('camera/capture', async () => {
     try {
+      if (!(await CameraService.status()))
+        throw new Error('Camera is not readed for capture');
       await CameraService.capture();
     } catch (error) {
       throw error;

@@ -13,8 +13,7 @@ const PhaseContext = createContext<PhaseContextValue | undefined>(undefined);
 
 export const PhaseProvider: React.FC<{
   children: React.ReactNode;
-  resetKey?: () => void;
-}> = ({ children, resetKey }) => {
+}> = ({ children }) => {
   const [currentPhase, setPhase] = useState(0);
   const navigate = useNavigate();
 
@@ -35,7 +34,6 @@ export const PhaseProvider: React.FC<{
 
   const restart = () => {
     setPhase(0);
-    if (resetKey) resetKey();
   };
 
   return (

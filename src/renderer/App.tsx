@@ -20,44 +20,102 @@ import PhaseNinePage from './pages/PhaseNinePage';
 import PhaseTenPage from './pages/PhaseTenPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorFallback from './components/ErrorFallback';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import UpdateStatusScreen from './pages/UpdateStatusScreen';
 AOS.init({
   duration: 1500,
   mirror: true,
   anchorPlacement: 'top',
 });
 
+type UISTATES =
+  | 'checking'
+  | 'downloading'
+  | 'installing'
+  | 'normal'
+  | 'starting'
+  | 'error';
+
 export default function App() {
   const [appKey, setAppKey] = useState(0);
-  const resetApp = () => setAppKey((prev) => prev + 1);
-  return (
-    <div key={appKey}>
-      <ErrorBoundary fallback={<ErrorFallback />}>
-        <DataProvider>
-          <PopupProvider>
-            <Popup />
-            <HashRouter>
-              <PhaseProvider resetKey={resetApp}>
-                <AppInitiators>
-                  <Routes>
-                    <Route path="/" element={<WelcomePage />}></Route>
-                    <Route path="/phase1" element={<PhaseOnePage />}></Route>
-                    <Route path="/phase2" element={<PhaseTwoPage />}></Route>
-                    <Route path="/phase3" element={<PhaseThreePage />}></Route>
-                    <Route path="/phase4" element={<PhaseFourPage />}></Route>
-                    <Route path="/phase5" element={<PhaseFivePage />}></Route>
-                    <Route path="/phase6" element={<PhaseSixPage />}></Route>
-                    <Route path="/phase7" element={<PhaseSevenPage />}></Route>
-                    <Route path="/phase8" element={<PhaseEightPage />}></Route>
-                    <Route path="/phase9" element={<PhaseNinePage />}></Route>
-                    <Route path="/phase10" element={<PhaseTenPage />}></Route>
-                  </Routes>
-                </AppInitiators>
-              </PhaseProvider>
-            </HashRouter>
-          </PopupProvider>
-        </DataProvider>
-      </ErrorBoundary>
-    </div>
-  );
+  const [UIState, setUIState] = useState<UISTATES>('normal');
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const resetApp = () => {
+    window.location.hash = '#/';
+    setAppKey((prev) => prev + 1);
+  };
+  useEffect(() => {
+    const handler = () => resetApp();
+    window.electron.reboot(handler);
+
+    window.electron.onUpdateStatus?.((status, data) => {
+      console.log('Update status', status);
+      switch (status) {
+        case 'checking':
+          setUIState('checking');
+          break;
+        case 'downloading':
+          setUIState('downloading');
+          if (data?.percent) setDownloadProgress(data.percent);
+          break;
+        case 'ready':
+          setUIState('installing');
+          break;
+        case 'not-available':
+          setUIState('normal');
+          break;
+        case 'error':
+          window.electron.logger.warn(
+            'This booth cannot check updates, this machine may run breaking changes version'
+          );
+
+          setUIState('normal');
+          break;
+      }
+    });
+  });
+
+  if (UIState !== 'normal')
+    return <UpdateStatusScreen state={UIState} progress={downloadProgress} />;
+
+  if (UIState === 'normal')
+    return (
+      <div key={appKey}>
+        <ErrorBoundary fallback={<ErrorFallback />}>
+          <DataProvider>
+            <PopupProvider>
+              <Popup />
+              <HashRouter>
+                <PhaseProvider>
+                  <AppInitiators>
+                    <Routes>
+                      <Route path="/" element={<WelcomePage />}></Route>
+                      <Route path="/phase1" element={<PhaseOnePage />}></Route>
+                      <Route path="/phase2" element={<PhaseTwoPage />}></Route>
+                      <Route
+                        path="/phase3"
+                        element={<PhaseThreePage />}
+                      ></Route>
+                      <Route path="/phase4" element={<PhaseFourPage />}></Route>
+                      <Route path="/phase5" element={<PhaseFivePage />}></Route>
+                      <Route path="/phase6" element={<PhaseSixPage />}></Route>
+                      <Route
+                        path="/phase7"
+                        element={<PhaseSevenPage />}
+                      ></Route>
+                      <Route
+                        path="/phase8"
+                        element={<PhaseEightPage />}
+                      ></Route>
+                      <Route path="/phase9" element={<PhaseNinePage />}></Route>
+                      <Route path="/phase10" element={<PhaseTenPage />}></Route>
+                    </Routes>
+                  </AppInitiators>
+                </PhaseProvider>
+              </HashRouter>
+            </PopupProvider>
+          </DataProvider>
+        </ErrorBoundary>
+      </div>
+    );
 }

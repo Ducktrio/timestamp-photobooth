@@ -1,6 +1,6 @@
 # Setups before running
 
-Lift kernel apparmor restriction for sandboxing. This is very important especially when the machine is one a fresh session (after reboot or restart).
+Lift kernel apparmor restriction for sandboxing. This is very important especially when the machine is one a fresh session (after reboot or restart). This solve problem of sandboxing. Please note that this action can put your machine into an invulnerable state of security. We doing this assuming your machine will run as a kiosk.
 
 ```bash
 sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
@@ -10,8 +10,43 @@ Then run this script, it will disable Volume Monitor that blocking your camera a
 
 ```bash
 sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+```
+
+Our program requires an identification number to run sync with our backend server. An environment variable file is required under the file name '.timestamp.env'.
+
+You must create a file named ".timestamp.env" in one of this directory:
 
 ```
+$HOME/.timestamp.env
+or
+/opt/timestamp/.env
+```
+
+The safest one is using the first option. $HOME is supposed to be your home directory. If you are unfamiliar with Linux, you full path of home directory will look something like this:
+
+```
+/home/<YOUR_USER>/
+```
+
+where \<YOUR_USER\> is your PC user name. This is the directory where Downloads and Desktop, etc. is placed. You can run below script if you are unsure what you're doing:
+
+```bash
+cd ~
+touch .timestamp.env
+```
+
+This will create the variable file in your home directory.
+
+After you create you file (you can confirm by looking it with you graphical File Explorer), you can copy below into your ".timestamp.env":
+
+```
+BOOTH_TOKEN=<YOUR_BOOTH_ID>
+BORDER_COLOR=<COLOR_IN_HEX>
+```
+
+Replace \<YOUR_BOOTH_ID\> with you booth identification number, and replace \<COLOR_IN_HEX\> as your color of choice in hexadecimal format (e.g. `#ffffff`, must be a valid format). The border color will be used as the color for creating guideline when taking pictures.
+
+If you fail to setup you environment variables, the program will throw error when opened.
 
 # Test your camera first
 

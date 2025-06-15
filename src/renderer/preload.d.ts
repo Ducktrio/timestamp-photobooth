@@ -29,6 +29,7 @@ declare global {
         BOOTH_TOKEN: string;
         SNAP_SCRIPT: string;
         ENV: string;
+        BORDER_COLOR: string;
       };
       onStream: (callback: (chunk: Uint8Array) => void) => void;
 

@@ -10,8 +10,6 @@ export const ViewfinderService = (window: BrowserWindow) => {
   wss.on('connection', async (ws) => {
     console.log('socket new client');
     let buffer = Buffer.alloc(0);
-    if (!(await CameraService.status()))
-      throw new Error('Camera is not readed for capture');
 
     try {
       CameraDriver.start_stream((chunk) => {

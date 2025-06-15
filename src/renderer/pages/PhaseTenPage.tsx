@@ -43,8 +43,8 @@ export default function PhaseTenPage() {
     });
   }, []);
 
-  const handleEnd = async () => {
-    await BoothManager.end();
+  const handleEnd = () => {
+    BoothManager.end();
   };
 
   const idle = useIdle(300000, true, handleEnd);

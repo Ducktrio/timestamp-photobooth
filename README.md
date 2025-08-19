@@ -1,97 +1,35 @@
-# Setups before running
+# Introduction
 
-Lift kernel apparmor restriction for sandboxing. This is very important especially when the machine is one a fresh session (after reboot or restart). This solve problem of sandboxing. Please note that this action can put your machine into an invulnerable state of security. We doing this assuming your machine will run as a kiosk.
+Timestamp photobooth is an flexible, manageable and easy to use photobooth software. It is a ready to use kiosk app running in Ubuntu-based machines. It is designed to be used in events like weddings, parties, conferences, etc. It allows users to take photos, print them and share them by QR scan to download from a hosted page.
 
-```bash
-sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-```
+This repo maintain the software of the photo booth app. Developed with Electron, enable us to distribute as AppImage executable ready to run as desktop app. The whole system of Timestamp is supported by a backend server and an admin panel, maintained in different repo. To make this work, the app must be configured with the server URL. The app will connect to the backend server to upload photos and retrieve settings.
 
-Then run this script, it will disable Volume Monitor that blocking your camera access:
+# Features
 
-```bash
-sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
-```
+Features that timestamp provide limited to the whole function with backend and admin panel:
 
-Our program requires an identification number to run sync with our backend server. An environment variable file is required under the file name '.timestamp.env'.
+- Multiple booth profile managed from admin
+- Manage theme and frames from admin
+- Customize color theme
+- Share photos by QR scan, link to a hosted page
+- Stop-motion video, records frames throughout capturing session.
+- Add and customize photo filters from admin.
 
-You must create a file named ".timestamp.env" in one of this directory:
+# Platform and Dependencies
 
-```
-$HOME/.timestamp.env
-or
-/opt/timestamp/.env
-```
+Timestamp Photobooth are consists of the photobooth app, web-based admin panel, and a backend server. This table provide information about the desktop app:
 
-The safest one is using the first option. $HOME is supposed to be your home directory. If you are unfamiliar with Linux, you full path of home directory will look something like this:
+| Component                                    | Versions               | Description                                                                         |
+| -------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------- |
+| Ubuntu                                       | Tested on 24.04.02 LTS | For running the kiosk app                                                           |
+| [gphoto2](https://github.com/gphoto/gphoto2) | 2.5.32                 | Open-source program for controlling DSLR based on its open source library libgphoto |
 
-```
-/home/<YOUR_USER>/
-```
+The current release only supports Ubuntu or any Debian distro that supports running AppImage.
 
-where \<YOUR_USER\> is your PC user name. This is the directory where Downloads and Desktop, etc. is placed. You can run below script if you are unsure what you're doing:
+# Setup and Running
 
-```bash
-cd ~
-touch .timestamp.env
-```
+Refer to [this setup markdown file](/SETUP.md) for detailed instructions on how to set up the Timestamp Photobooth app, including installation of dependencies, configuration, and running the app.
 
-This will create the variable file in your home directory.
+# Post Notes
 
-After you create you file (you can confirm by looking it with you graphical File Explorer), you can copy below into your ".timestamp.env":
-
-```
-BOOTH_TOKEN=<YOUR_BOOTH_ID>
-BORDER_COLOR=<COLOR_IN_HEX>
-```
-
-Replace \<YOUR_BOOTH_ID\> with you booth identification number, and replace \<COLOR_IN_HEX\> as your color of choice in hexadecimal format (e.g. `#ffffff`, must be a valid format). The border color will be used as the color for creating guideline when taking pictures.
-
-If you fail to setup you environment variables, the program will throw error when opened.
-
-# Test your camera first
-
-Run this bash script in terminal to read your camera
-
-```bash
-gphoto2 --auto-detect
-```
-
-You should see list of camera models if there's any that can be read. If you don't see any, please resolve issue regarding gphoto2.
-
-If your camera model, this means your camera is usable. But you still need to check is functionality.
-
-Run this bash script, it will test to capture file and download it to your current directory. If you unfamiliar with bash, proceed this first:
-
-```bash
-cd ~ && cd Downloads
-```
-
-What it does is changing your working directory to Downloads folder at HOME. This is equivalent to opening your File Explorer program and open Downloads folder in your home directory.
-
-Then run this script:
-
-```bash
-gphoto2 --capture-image-and-download --filename ./test.jpg
-```
-
-This should trigger capture on your camera and save it in your Downloads folder. If everything runs smoothly, your camera should trigger and the capture file is in your Downloads folder under the name "test.jpg".
-
-Next, we test for video stream:
-
-```bash
-gphoto2 --capture-movie --stdout
-```
-
-If everything run smoothly, your terminal should print out this continuous random characters, even characters that aren't recognize. This means you camera can send us video stream from its viewfinder.
-
-## Troubleshoot
-
-If you get error like this:
-
-```bash
-*** USB cannot be claimed ***
-```
-
-or similar, the camera may be already being used in other program. Try to close any other program that use it. A common program that uses it especially in GNOME desktop are Volume Monitor. Please run the bash script at the setup section.
-
-If you face any problem regarding with Gphoto2, we cannot help any further but to start from above.
+This project is mainly a project work for our client. We did not plan to make this an open contribution project, but we did make it open source and allow everyone to use it under our license and the clients approval. We may wish to make this project open for contribution in the future, but we are not sure yet. If you want to contribute, please contact us first.

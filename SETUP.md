@@ -42,11 +42,33 @@ After you create you file (you can confirm by looking it with you graphical File
 ```
 BOOTH_TOKEN=<YOUR_BOOTH_ID>
 BORDER_COLOR=<COLOR_IN_HEX>
+API_URL=<API_URL>
 ```
+
+Replace \<API_URL\> with the URL of your backend server API (must include the '/api' too).
 
 Replace \<YOUR_BOOTH_ID\> with you booth identification number, and replace \<COLOR_IN_HEX\> as your color of choice in hexadecimal format (e.g. `#ffffff`, must be a valid format). The border color will be used as the color for creating guideline when taking pictures.
 
 If you fail to setup you environment variables, the program will throw error when opened.
+
+# Install Library
+
+In Ubuntu, install these:
+```bash
+
+apt update
+apt install libgphoto2-6
+apt install gphoto2
+```
+
+You may receive error says you need to run the install as elevated user, then use `sudo`, which then prompt you for password
+```
+
+sudo apt install libgphoto2-6
+sudo apt install gphoto2
+```
+```
+```
 
 # Test your camera first
 

@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [24.x]
-      steps:
+    steps:
       - uses: actions/checkout@v4
 
       - name: Testing in NodeJS ${{ matrix.node-version }} ${{secrets.message}}

@@ -1,6 +1,14 @@
+import { useEffect, useState } from 'react';
 import './ErrorFallback.css';
 
 export default function ErrorFallback() {
+  const [message, setMessage] = useState<string>("")
+  useEffect(() => {
+    window.electron.throw((msg) => {
+      setMessage(msg)
+    })
+
+  }, [])
   return (
     <>
       <div className="error-fallback">
@@ -10,6 +18,11 @@ export default function ErrorFallback() {
           we’re sorry for the inconvenience. our machine run into an issue, and
           for now we're out of service. if you need any assistance, please
           contact us <a>timestamp.photobooth@gmail.com</a>
+        </p>
+
+        <p>
+
+          Error message: {message}
         </p>
       </div>
     </>

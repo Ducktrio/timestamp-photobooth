@@ -3,6 +3,7 @@ import { Channels } from 'main/preload';
 declare global {
   interface Window {
     electron: {
+      throw: (callback: (message: string) => void) => void;
       /**
        * Reboot
        */
@@ -30,6 +31,7 @@ declare global {
         SNAP_SCRIPT: string;
         ENV: string;
         BORDER_COLOR: string;
+        API_URL: string;
       };
       onStream: (callback: (chunk: Uint8Array) => void) => void;
 
@@ -86,4 +88,4 @@ declare global {
   }
 }
 
-export {};
+export { };

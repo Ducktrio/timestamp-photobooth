@@ -25,6 +25,7 @@ async function handleCriticalError(type: string, error: Error) {
   logger.error(error.message, {
     stack: error.stack,
   });
+  mainWindow?.webContents.send('throw', error.message)
 
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch((err) => {

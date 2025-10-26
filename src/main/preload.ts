@@ -3,6 +3,11 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
+  throw: (callback: (message: string) => void) => {
+    return ipcRenderer.on('throw', (_, message) => {
+      callback(message)
+    })
+  },
   reboot: (callback: () => void) => {
     ipcRenderer.on('reboot', callback);
   },
@@ -70,6 +75,7 @@ contextBridge.exposeInMainWorld('electron', {
         : 'https://app.sandbox.midtrans.com/snap/snap.js', // TODO: CHANGE THIS WHEN MIDTRANS ISSUE RESOLVED
     ENV: process.env.NODE_ENV,
     BORDER_COLOR: process.env.BORDER_COLOR,
+    API_URL: process.env.API_URL
   },
   logger: {
     error(message: string, meta?: Record<string, any>) {

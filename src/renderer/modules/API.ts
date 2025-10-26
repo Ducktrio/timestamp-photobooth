@@ -18,7 +18,8 @@ export default class API {
     this.autoDeconstruct = autoDeconstructData!;
     this.token = token;
     this.axiosInstance = axios.create({
-      baseURL: 'https://timestamp.fun/api',
+      baseURL: window.electron.config.API_URL,
+
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

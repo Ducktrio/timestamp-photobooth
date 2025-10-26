@@ -11,13 +11,13 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/Wakugumi/timestamp-photobooth",
+  "homepage": "https://github.com/Ducktrio/timestamp-photobooth",
   "bugs": {
-    "url": "https://github.com/Wakugumi/timestamp-photobooth/issues"
+    "url": "https://github.com/Ducktrio/timestamp-photobooth/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wakugumi/timestamp-photobooth.git"
+    "url": "git+https://github.com/Ducktrio/timestamp-photobooth.git"
   },
   "license": "MIT",
   "author": {
@@ -271,10 +271,6 @@
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
-  },
-  "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
   },
   "electronmon": {
     "patterns": [

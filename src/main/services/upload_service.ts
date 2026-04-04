@@ -22,7 +22,7 @@ class UploadService {
   private image_count: number;
   private page: Page | null;
   private API = axios.create({
-    baseURL: 'https://timestamp.fun/api',
+    baseURL: process.env.API_URL,
     headers: {
       Token: process.env.BOOTH_TOKEN,
     },
@@ -131,7 +131,8 @@ class UploadService {
    * Return url of a publically hosted page for download
    */
   public getUrl() {
-    return `https://timestamp.fun/views/${this.page?.id}`;
+    return `${new String(process.env.API_URL).replace("/api", `/views/${this.page?.id}`)}`;
+
   }
 }
 

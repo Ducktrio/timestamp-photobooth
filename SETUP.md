@@ -51,6 +51,14 @@ Replace \<YOUR_BOOTH_ID\> with you booth identification number, and replace \<CO
 
 If you fail to setup you environment variables, the program will throw error when opened.
 
+## Bypass Payment Integration
+To setup your booth without payment, insert this line into your config variables (the `.timestamp.env` file)
+```
+BYPASS_PAYMENT=bypasspayment
+```
+
+The config value has to be equal, else ignored
+
 # Install Library
 
 In Ubuntu, install these:

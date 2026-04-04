@@ -75,7 +75,9 @@ contextBridge.exposeInMainWorld('electron', {
         : 'https://app.sandbox.midtrans.com/snap/snap.js', // TODO: CHANGE THIS WHEN MIDTRANS ISSUE RESOLVED
     ENV: process.env.NODE_ENV,
     BORDER_COLOR: process.env.BORDER_COLOR,
-    API_URL: process.env.API_URL
+    API_URL: process.env.API_URL,
+    BYPASS_PAYMENT: process.env.BYPASS_PAYMENT
+
   },
   logger: {
     error(message: string, meta?: Record<string, any>) {

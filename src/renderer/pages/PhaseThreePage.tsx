@@ -38,10 +38,6 @@ export default function PhaseThreePage() {
       throw new Error(
         'Unable to make payment, somehow data for payment is missing'
       );
-    console.log(
-      window.electron.config.SNAP_SCRIPT,
-      BoothManager.Booth.clientKey
-    );
     if (token) return;
     (async () => {
       const token = await PaymentService.pay(data.frame!.id, data.quantity);
@@ -70,18 +66,18 @@ export default function PhaseThreePage() {
 
     if (state === State.RUNNING && token)
       window.snap.pay(token, {
-        onSuccess: function (result: PaymentCallback) {
+        onSuccess: function(result: PaymentCallback) {
           data.setPayment(result);
           window.electron.logger.info('A transaction has been settled', result);
           handleNext();
         },
-        onPending: function () {
+        onPending: function() {
           window.electron.logger.info(
             'A payment request is closed or left pending'
           );
           setState(State.ABORT);
         },
-        onError: function (result: PaymentErrorCallback) {
+        onError: function(result: PaymentErrorCallback) {
           window.electron.logger.warn(
             `Error occured on an attempt of payment: ${result.status_message[0]}`,
             result
@@ -89,7 +85,7 @@ export default function PhaseThreePage() {
           setState(State.ERROR);
           setError(new Error(result.status_message[0]));
         },
-        onClose: function () {
+        onClose: function() {
           window.electron.logger.info('A payment request is closed by user');
           setState(State.ABORT);
         },

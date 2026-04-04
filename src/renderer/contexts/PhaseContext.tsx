@@ -18,8 +18,16 @@ export const PhaseProvider: React.FC<{
   const navigate = useNavigate();
 
   const next = () => {
-    navigate(`/phase${currentPhase + 1}`);
-    setPhase(currentPhase + 1);
+
+    let nextPhase = currentPhase + 1;
+
+    // Skip payment phase if bypass is enabled
+    if (nextPhase === 4 && window.electron.config.BYPASS_PAYMENT === "bypasspayment") {
+      nextPhase = 5;
+    }
+
+    navigate(`/phase${nextPhase}`);
+    setPhase(nextPhase);
   };
 
   const previous = () => {
@@ -31,7 +39,6 @@ export const PhaseProvider: React.FC<{
     setPhase(destination);
     navigate(`/phase${destination}`);
   };
-
   const restart = () => {
     setPhase(0);
   };

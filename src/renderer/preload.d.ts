@@ -32,6 +32,7 @@ declare global {
         ENV: string;
         BORDER_COLOR: string;
         API_URL: string;
+        BYPASS_PAYMENT: string;
       };
       onStream: (callback: (chunk: Uint8Array) => void) => void;
 

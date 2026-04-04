@@ -22,8 +22,8 @@ export const PhaseProvider: React.FC<{
     let nextPhase = currentPhase + 1;
 
     // Skip payment phase if bypass is enabled
-    if (nextPhase === 4 && window.electron.config.BYPASS_PAYMENT === "bypasspayment") {
-      nextPhase = 5;
+    if (nextPhase === 3 && window.electron.config.BYPASS_PAYMENT === "bypasspayment") {
+      nextPhase = 4;
     }
 
     navigate(`/phase${nextPhase}`);

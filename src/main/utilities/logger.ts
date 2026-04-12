@@ -32,7 +32,7 @@ class LoggerFactory {
           format: format.colorize({ all: true }),
         }),
         new HttpPostTransport({
-          endpoint: 'https://timestamp.fun/api/boothLogs',
+          endpoint: `${process.env.API_URL}/boothLogs`,
           headers: {
             Token: process.env.BOOTH_TOKEN,
           },
